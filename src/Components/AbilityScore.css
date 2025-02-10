@@ -1,10 +1,11 @@
 .ability-score {
     border-radius: 8px;
     border: 1px solid black;
+    display: flex;
+    flex-flow: column;
     align-self: center;
     flex: 1;
     aspect-ratio: 1;
     align-items: center;
     text-align: center;
-    background-color: mediumpurple;
 }

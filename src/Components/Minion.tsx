@@ -1,5 +1,5 @@
 import "./Minion.css";
-import AbilityScore from "./AbilityScore.tsx";
+import AbilityScore, {AbilityScores} from "./AbilityScore.tsx";
 import ActionRow from "./ActionRow.tsx";
 
 export default function Minion({name, mainColor, subColor}: {name: string, mainColor: string, subColor: string}) {
@@ -28,14 +28,14 @@ export default function Minion({name, mainColor, subColor}: {name: string, mainC
                 <div className="column">
                     <div className="ability-score-group">
                         <div className="row">
-                            <AbilityScore/>
-                            <AbilityScore/>
-                            <AbilityScore/>
+                            <AbilityScore ability={AbilityScores.STR}/>
+                            <AbilityScore ability={AbilityScores.DEX}/>
+                            <AbilityScore ability={AbilityScores.CON}/>
                         </div>
                         <div className="row">
-                            <AbilityScore/>
-                            <AbilityScore/>
-                            <AbilityScore/>
+                            <AbilityScore ability={AbilityScores.INT}/>
+                            <AbilityScore ability={AbilityScores.WIS}/>
+                            <AbilityScore ability={AbilityScores.CHA}/>
                         </div>
                     </div>
                     <div className="characteristic-group" id="proficiencies">
@@ -49,8 +49,14 @@ export default function Minion({name, mainColor, subColor}: {name: string, mainC
                 </div>
                 <div className="column">
                     <div className="row">
-                        <div className="ac">15</div>
-                        <div className="speed">25</div>
+                        <div className="info-square">
+                            <label>AC</label>
+                            <label>15</label>
+                        </div>
+                        <div className="info-square">
+                            <label>Speed</label>
+                            <label>25ft</label>
+                        </div>
                         <button className="apply-effect">Apply Effect</button>
                     </div>
                     <div className="characteristic-group" id="senses">

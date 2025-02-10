@@ -54,7 +54,6 @@
 .ability-score-group {
     display: flex;
     flex-direction: column;
-    background-color: limegreen;
     gap: .1em;
 }
 
@@ -77,26 +76,17 @@
     font-size: large;
 }
 
-.ac {
+.info-square {
     border-radius: 8px;
     border: 1px solid black;
+    display: flex;
+    flex-flow: column;
     align-self: center;
     flex: 1;
     aspect-ratio: 1;
     align-items: center;
     text-align: center;
-    background-color: rgba(203,203,203,0.58);
-}
-
-.speed {
-    border-radius: 8px;
-    border: 1px solid black;
-    align-self: center;
-    flex: 1;
-    aspect-ratio: 1;
-    align-items: center;
-    text-align: center;
-    background-color: darkgoldenrod;
+    gap: 5px;
 }
 
 .apply-effect {

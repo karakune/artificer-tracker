@@ -23,10 +23,7 @@
 
 .menu-zone {
   display: flex;
-  /*flex: 5;*/
-  /*height: 5vh;*/
   flex-basis: auto;
-  background-color: yellowgreen;
 }
 
 .menu-zone > button > img {
@@ -38,7 +35,6 @@
   flex: 1;
   flex-direction: column;
   gap: .2vh;
-  /*background-color: lightblue;*/
 }
 
 .column {
