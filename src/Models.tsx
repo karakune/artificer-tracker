@@ -8,8 +8,8 @@ export enum AbilityScores {
 }
 
 export enum HitDice {
-    d4 = 4,
-    d8 = 8
+    d4 = "d4",
+    d8 = "d8"
 }
 
 export class Minion {
@@ -18,6 +18,7 @@ export class Minion {
     public abilityScores: AbilityScore[] = [];
     public hpMax: number = 0;
     public hpCurrent: number = 0;
+    public hpTemp: number = 0;
     public hitDiceMax: number = 0;
     public hitDiceCurrent: number = 0;
     public hitDie: HitDice = HitDice.d4;
@@ -35,14 +36,14 @@ export class Minion {
     }
 
     private static computeProficiencyBonus(artificerLevel: number) {
-        return 2 + Math.ceil(artificerLevel / 4);
+        return 1 + Math.ceil(artificerLevel / 4);
     }
 
     public static createSteelDefender(artificerLevel: number, artificerIntMod: number) : Minion {
         let pb = this.computeProficiencyBonus(artificerLevel);
         let hpMax = 2 + artificerIntMod + (5 * artificerLevel);
         return new Minion({
-            name: "SteelDefender",
+            name: "Steel Defender",
             proficiencyBonus: pb,
             abilityScores: [
                 new AbilityScore(AbilityScores.STR, 2, false),
@@ -76,7 +77,7 @@ export class Minion {
                 new Action("Repair", 2, HitDice.d8, 5, undefined, 3)
             ],
             reactions: [
-                new Feature("Deflect Attack", "Disadvantage on one attack roll on other within 5ft")
+                new Feature("Deflect Attack", "Imposes disadvantage on one attack roll on one other creature it can see within 5ft")
             ]
         });
     }
@@ -100,7 +101,7 @@ export class Minion {
             hitDiceMax: 1,
             hitDiceCurrent: 1,
             ac: 13,
-            speed: 40,
+            speed: 30,
             proficiencies: [
                 new Proficiency("Stealth", 2 + pb),
                 new Proficiency("Perception", 2 + pb)
@@ -116,7 +117,7 @@ export class Minion {
                 new Action("Force Strike", 1, HitDice.d4, 30, 2 + pb)
             ],
             reactions: [
-                new Feature("Channel Magic", "Deliver a spell with range of touch (while within 120ft)")
+                new Feature("Channel Magic", "Delivers a spell with a range of touch that you cast (while within 120ft of you)")
             ]
         });
     }
@@ -138,7 +139,7 @@ export class Feature {
 }
 
 export class Action {
-    public currentUses?: number;
+    public currentUses: number = 0;
     constructor(public name: string,
                 public damageDiceCount: number,
                 public damageDie: HitDice,
