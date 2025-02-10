@@ -14,7 +14,8 @@
       {
         "title": "artificer-tracker",
         "width": 405,
-        "height": 878
+        "height": 878,
+        "resizable": false
       }
     ],
     "security": {
