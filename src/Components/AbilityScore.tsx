@@ -1,13 +1,5 @@
 import "./AbilityScore.css";
-
-export enum AbilityScores {
-    STR = "STR",
-    DEX = "DEX",
-    CON = "CON",
-    INT = "INT",
-    WIS = "WIS",
-    CHA = "CHA"
-}
+import {AbilityScores} from "../Models.tsx";
 
 export default function AbilityScore({ability}: {ability: AbilityScores}) {
     return (

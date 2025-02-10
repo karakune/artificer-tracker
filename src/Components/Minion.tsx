@@ -1,6 +1,7 @@
 import "./Minion.css";
-import AbilityScore, {AbilityScores} from "./AbilityScore.tsx";
+import AbilityScore from "./AbilityScore.tsx";
 import ActionRow from "./ActionRow.tsx";
+import {AbilityScores} from "../Models.tsx";
 
 export default function Minion({name, mainColor, subColor}: {name: string, mainColor: string, subColor: string}) {
     return (
