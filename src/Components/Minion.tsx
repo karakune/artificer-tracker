@@ -12,6 +12,11 @@ export default function Minion({minion, mainColor, setMinion}: {minion: MinionMo
         setHpChangeAmount(Number(e.target.value));
     }
 
+    function handleHpTempChange(e: any) {
+        e.preventDefault();
+        setMinion({...minion, hpTemp: Math.max(0, Number(e.target.value))});
+    }
+
     function healMinion() {
         if (hpChangeAmount == 0) {
             return;
@@ -28,14 +33,14 @@ export default function Minion({minion, mainColor, setMinion}: {minion: MinionMo
             return;
         }
 
-        let minusTemp = hpChangeAmount - minion.hpTemp;
+        let newTemp = Math.max(0, minion.hpTemp - hpChangeAmount);
+        let newCurrent = minion.hpCurrent;
 
-        if (minusTemp > minion.hpTemp) {
-            let newHp = Math.max(0, minion.hpCurrent - minusTemp);
-            setMinion({...minion, hpCurrent: newHp, hpTemp: 0});
-        } else {
-            setMinion({...minion, hpTemp: minion.hpTemp - hpChangeAmount});
+        if (newTemp == 0) {
+            newCurrent = Math.max(0, minion.hpCurrent - (hpChangeAmount - minion.hpTemp));
         }
+
+        setMinion({...minion, hpCurrent: newCurrent, hpTemp: newTemp});
 
         setHpChangeAmount(0);
     }
@@ -54,7 +59,7 @@ export default function Minion({minion, mainColor, setMinion}: {minion: MinionMo
                 <div className="row hp-group">
                     <div className="hp-column">
                         <button className="hp-button" onClick={healMinion}>Heal</button>
-                        <input className="hp-input" type="number" value={hpChangeAmount}
+                        <input className="hp-input" type="number" min="0" step="1"
                                onChange={handleHpAmountChange}/>
                         <button className="hp-button" onClick={damageMinion}>Damage</button>
                     </div>
@@ -64,7 +69,8 @@ export default function Minion({minion, mainColor, setMinion}: {minion: MinionMo
                     </div>
                     <div className="column">
                         <label>Temp</label>
-                        <label>{minion.hpTemp > 0 ? minion.hpTemp : "--"}</label>
+                        <input className="hp-input" type="number" min="0" step="1" placeholder={minion.hpTemp.toString()}
+                               onChange={handleHpTempChange}/>
                     </div>
                 </div>
             </div>

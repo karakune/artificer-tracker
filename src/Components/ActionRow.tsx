@@ -20,11 +20,15 @@ export default function ActionRow({action, pb}: {action: Action, pb: number}) {
 
     return (
         <div className="action-row">
-            <label>{action.name}</label>
-            <Uses action={action}/>
-            <label className="range">{action.range}</label>
-            {action.attackMod != null && <label className="attack-bonus">+{action.attackMod}</label>}
-            <label className="damage">{action.damageDiceCount}{action.damageDie}+{pb}</label>
+            <div className="action-row-group">
+                <label>{action.name}</label>
+                <Uses action={action}/>
+            </div>
+            <div className="action-row-group" style={{justifyContent:"space-between"}}>
+                <label className="range">{action.range}</label>
+                {action.attackMod != null && <label className="attack-bonus">+{action.attackMod}</label>}
+                <label className="damage">{action.damageDiceCount}{action.damageDie}+{pb}</label>
+            </div>
         </div>
     );
 }
