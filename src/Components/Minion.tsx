@@ -3,9 +3,13 @@ import AbilityScore from "./AbilityScore.tsx";
 import ActionRow from "./ActionRow.tsx";
 import {Feature as FeatureModel, Minion as MinionModel} from "../Models.tsx";
 import {useState} from "react";
+import EffectsPanel from "./EffectsPanel.tsx";
 
-export default function Minion({minion, mainColor, setMinion}: {minion: MinionModel, mainColor: string, setMinion: any}) {
+export default function Minion({id, minion, mainColor, setMinion}: {id: number, minion: MinionModel, mainColor: string, setMinion: any}) {
     const [hpChangeAmount, setHpChangeAmount] = useState<number>(0);
+    const [isEffectsPanelOpen, setEffectsPanelOpen] = useState(false);
+    const [isBlessed, setBlessed] = useState(false);
+    const [isEnlarged, setEnlarged] = useState(false);
 
     function handleHpAmountChange(e: any) {
         e.preventDefault();
@@ -45,6 +49,10 @@ export default function Minion({minion, mainColor, setMinion}: {minion: MinionMo
         setHpChangeAmount(0);
     }
 
+    function openEffectsPanel() {
+        setEffectsPanelOpen(true);
+    }
+
     const Feature = function({feature}: {feature: FeatureModel}) {
         return (
             <label style={{fontSize:"0.9em"}}><b>{feature.title}</b> {feature.description}</label>
@@ -54,6 +62,8 @@ export default function Minion({minion, mainColor, setMinion}: {minion: MinionMo
     return (
         // @ts-ignore
         <div className="minion" style={{"--minion-color": mainColor}}>
+            <EffectsPanel id={id} isOpen={isEffectsPanelOpen} setOpen={setEffectsPanelOpen} isBlessed={isBlessed}
+                          setBlessed={setBlessed} isEnlarged={isEnlarged} setEnlarged={setEnlarged} />
             <div className="title-row">
                 <label className="minion-name">{minion.name}</label>
                 <div className="row hp-group">
@@ -113,7 +123,7 @@ export default function Minion({minion, mainColor, setMinion}: {minion: MinionMo
                             <label>Speed</label>
                             <label>{minion.speed}ft</label>
                         </div>
-                        <button className="apply-effect">Apply Effect</button>
+                        <button className="apply-effect" onClick={openEffectsPanel}>Apply Effect</button>
                     </div>
                     <div className="characteristic-group" id="senses">
                         <label className="title">Senses</label>
@@ -135,7 +145,8 @@ export default function Minion({minion, mainColor, setMinion}: {minion: MinionMo
             </div>
             <div id="actions">
                 <label className="title scooted">Actions</label>
-                {minion.actions.map(a => <ActionRow key={a.name} action={a} pb={minion.proficiencyBonus}/>)}
+                {minion.actions.map(a => <ActionRow key={a.name} action={a} pb={minion.proficiencyBonus}
+                                                    isBlessed={isBlessed} isEnlarged={isEnlarged}/>)}
             </div>
             <div id="reactions">
                 <label className="title scooted">Reactions</label>

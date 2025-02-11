@@ -51,8 +51,8 @@ function App() {
         <main className="container" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} onMouseDown={onClickStart} onMouseUp={onClickEnd}>
             <MenuContainer isVisible={showMenu}/>
             <div className="minion-zone">
-                <Minion minion={steelDefender} mainColor="coral" setMinion={setSteelDefender}/>
-                <Minion minion={homServant} mainColor="royalblue" setMinion={setHomServant}/>
+                <Minion id={0} minion={steelDefender} mainColor="coral" setMinion={setSteelDefender}/>
+                <Minion id={1} minion={homServant} mainColor="royalblue" setMinion={setHomServant}/>
             </div>
         </main>
     );
