@@ -24,25 +24,25 @@ export default function EffectsPanel(
 
     return (
         <Modal
-        style={{
-            overlay: {
-                height: "50vh",
-                top: id == 0 ? "0" : "50vh"
-            }
-        }}
-        isOpen={isOpen} onRequestClose={() => setOpen(false)}
-        shouldCloseOnOverlayClick={true} shouldCloseOnEsc={true}>
-        <h2>Apply Effects</h2>
-        <div>
-            <input type="checkbox" defaultChecked={isBlessed}
-                   onChange={(e) => setBlessed(e.target.checked)}/>
-            <label>Bless</label>
-        </div>
-        <div>
-            <input type="checkbox" defaultChecked={isEnlarged}
-                   onChange={(e) => setEnlarged(e.target.checked)}/>
-            <label>Enlarge</label>
-        </div>
-    </Modal>
+            style={{
+                overlay: {
+                    height: "50vh",
+                    top: id == 0 ? "0" : "50vh"
+                }
+            }}
+            isOpen={isOpen} onRequestClose={() => setOpen(false)}
+            shouldCloseOnOverlayClick={true} shouldCloseOnEsc={true}>
+            <h2>Apply Effects</h2>
+            <div>
+                <input type="checkbox" defaultChecked={isBlessed}
+                       onChange={(e) => setBlessed(e.target.checked)}/>
+                <label>Bless</label>
+            </div>
+            <div>
+                <input type="checkbox" defaultChecked={isEnlarged}
+                       onChange={(e) => setEnlarged(e.target.checked)}/>
+                <label>Enlarge</label>
+            </div>
+        </Modal>
     )
 }

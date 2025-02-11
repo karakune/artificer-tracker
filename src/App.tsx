@@ -3,11 +3,14 @@ import Minion from "./Components/Minion.tsx";
 import {Minion as MinionModel} from "./Models.tsx";
 import {useState} from "react";
 import MenuContainer from "./Components/MenuContainer.tsx";
+import { PopupActiveContext } from "./Components/ConfirmationPopup.tsx";
 
 function App() {
     const [steelDefender, setSteelDefender] = useState<MinionModel>(MinionModel.createSteelDefender(5, 4));
     const [homServant, setHomServant] = useState<MinionModel>(MinionModel.createHomunculusServant(5));
     const [showMenu, setShowMenu] = useState(false);
+    const [isPopupActive, setPopupActive] = useState(false);
+    const value = {isPopupActive, setPopupActive}
     let touchStartX = 0;
     let touchEndX = 0;
     let swipeThreshold = 20;
@@ -31,6 +34,10 @@ function App() {
     }
 
     function checkDirection() {
+        if (isPopupActive) {
+            return;
+        }
+
         if (touchEndX < touchStartX && touchStartX - touchEndX > swipeThreshold) {
             onSwipedLeft();
         }
@@ -48,13 +55,16 @@ function App() {
     }
 
     return (
-        <main className="container" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} onMouseDown={onClickStart} onMouseUp={onClickEnd}>
-            <MenuContainer isVisible={showMenu}/>
-            <div className="minion-zone">
-                <Minion id={0} minion={steelDefender} mainColor="coral" setMinion={setSteelDefender}/>
-                <Minion id={1} minion={homServant} mainColor="royalblue" setMinion={setHomServant}/>
-            </div>
-        </main>
+        <PopupActiveContext.Provider value={value}>
+            <main className="container" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} onMouseDown={onClickStart}
+                  onMouseUp={onClickEnd}>
+                <MenuContainer isVisible={showMenu}/>
+                <div className="minion-zone">
+                    <Minion id={0} minion={steelDefender} mainColor="coral" setMinion={setSteelDefender}/>
+                    <Minion id={1} minion={homServant} mainColor="royalblue" setMinion={setHomServant}/>
+                </div>
+            </main>
+        </PopupActiveContext.Provider>
     );
 }
 
