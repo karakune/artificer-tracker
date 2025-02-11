@@ -2,8 +2,44 @@ import "./Minion.css";
 import AbilityScore from "./AbilityScore.tsx";
 import ActionRow from "./ActionRow.tsx";
 import {Feature as FeatureModel, Minion as MinionModel} from "../Models.tsx";
+import {useState} from "react";
 
-export default function Minion({minion, mainColor}: {minion: MinionModel, mainColor: string}) {
+export default function Minion({minion, mainColor, setMinion}: {minion: MinionModel, mainColor: string, setMinion: any}) {
+    const [hpChangeAmount, setHpChangeAmount] = useState<number>(0);
+
+    function handleHpAmountChange(e: any) {
+        e.preventDefault();
+        setHpChangeAmount(Number(e.target.value));
+    }
+
+    function healMinion() {
+        if (hpChangeAmount == 0) {
+            return;
+        }
+
+        let newHp = Math.min(minion.hpMax, minion.hpCurrent + hpChangeAmount);
+
+        setMinion({...minion, hpCurrent: newHp});
+        setHpChangeAmount(0);
+    }
+
+    function damageMinion() {
+        if (hpChangeAmount == 0) {
+            return;
+        }
+
+        let minusTemp = hpChangeAmount - minion.hpTemp;
+
+        if (minusTemp > minion.hpTemp) {
+            let newHp = Math.max(0, minion.hpCurrent - minusTemp);
+            setMinion({...minion, hpCurrent: newHp, hpTemp: 0});
+        } else {
+            setMinion({...minion, hpTemp: minion.hpTemp - hpChangeAmount});
+        }
+
+        setHpChangeAmount(0);
+    }
+
     const Feature = function({feature}: {feature: FeatureModel}) {
         return (
             <label style={{fontSize:"0.9em"}}><b>{feature.title}</b> {feature.description}</label>
@@ -17,9 +53,10 @@ export default function Minion({minion, mainColor}: {minion: MinionModel, mainCo
                 <label className="minion-name">{minion.name}</label>
                 <div className="row hp-group">
                     <div className="hp-column">
-                        <button className="hp-button">Heal</button>
-                        <input className="hp-input" type="number"/>
-                        <button className="hp-button">Damage</button>
+                        <button className="hp-button" onClick={healMinion}>Heal</button>
+                        <input className="hp-input" type="number" value={hpChangeAmount}
+                               onChange={handleHpAmountChange}/>
+                        <button className="hp-button" onClick={damageMinion}>Damage</button>
                     </div>
                     <div className="column">
                         <label>Current/Max</label>
@@ -57,7 +94,7 @@ export default function Minion({minion, mainColor}: {minion: MinionModel, mainCo
                     </div>
                     <div className="characteristic-group" id="passives">
                         <label className="title">Passives</label>
-                        {minion.passives.map(p => <Feature feature={p}/>)}
+                        {minion.passives.map(p => <Feature key={p.title} feature={p}/>)}
                     </div>
                 </div>
                 <div className="column">
@@ -92,11 +129,11 @@ export default function Minion({minion, mainColor}: {minion: MinionModel, mainCo
             </div>
             <div id="actions">
                 <label className="title scooted">Actions</label>
-                {minion.actions.map(a => <ActionRow action={a} pb={minion.proficiencyBonus}/>)}
+                {minion.actions.map(a => <ActionRow key={a.name} action={a} pb={minion.proficiencyBonus}/>)}
             </div>
             <div id="reactions">
                 <label className="title scooted">Reactions</label>
-                {minion.reactions.map(r => <Feature feature={r}/>)}
+                {minion.reactions.map(r => <Feature key={r.title} feature={r}/>)}
             </div>
         </div>
     );

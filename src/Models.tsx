@@ -30,11 +30,6 @@ export class Minion {
     public reactions: Feature[] = [];
     public conditionImmunities: string[] = [];
 
-
-    private constructor(init: Partial<Minion>) {
-        Object.assign(this, init);
-    }
-
     private static computeProficiencyBonus(artificerLevel: number) {
         return 1 + Math.ceil(artificerLevel / 4);
     }
@@ -42,84 +37,87 @@ export class Minion {
     public static createSteelDefender(artificerLevel: number, artificerIntMod: number) : Minion {
         let pb = this.computeProficiencyBonus(artificerLevel);
         let hpMax = 2 + artificerIntMod + (5 * artificerLevel);
-        return new Minion({
-            name: "Steel Defender",
-            proficiencyBonus: pb,
-            abilityScores: [
-                new AbilityScore(AbilityScores.STR, 2, false),
-                new AbilityScore(AbilityScores.DEX, 1, true),
-                new AbilityScore(AbilityScores.CON, 2, true),
-                new AbilityScore(AbilityScores.INT, -3, false),
-                new AbilityScore(AbilityScores.WIS, 0, false),
-                new AbilityScore(AbilityScores.CHA, -2, false)
-            ],
-            hpMax: hpMax,
-            hpCurrent: hpMax,
-            hitDie: HitDice.d8,
-            hitDiceMax: artificerLevel,
-            hitDiceCurrent: artificerLevel,
-            ac: 15,
-            speed: 40,
-            proficiencies: [
-                new Proficiency("Athletics", 2 + pb),
-                new Proficiency("Perception", 2 * pb)
-            ],
-            conditionImmunities: [
-                "Charmed",
-                "Exhaustion",
-                "Poisoned"
-            ],
-            passives: [
-                new Feature("Vigilant", "The defender can't be surprised")
-            ],
-            actions: [
-                new Action("Force-Empowered Rend", 1, HitDice.d8, 5, artificerIntMod + pb),
-                new Action("Repair", 2, HitDice.d8, 5, undefined, 3)
-            ],
-            reactions: [
-                new Feature("Deflect Attack", "Imposes disadvantage on one attack roll on one other creature it can see within 5ft")
-            ]
-        });
+        let sd = new Minion();
+
+        sd.name = "Steel Defender";
+        sd.proficiencyBonus = pb;
+        sd.abilityScores = [
+            new AbilityScore(AbilityScores.STR, 2, false),
+            new AbilityScore(AbilityScores.DEX, 1, true),
+            new AbilityScore(AbilityScores.CON, 2, true),
+            new AbilityScore(AbilityScores.INT, -3, false),
+            new AbilityScore(AbilityScores.WIS, 0, false),
+            new AbilityScore(AbilityScores.CHA, -2, false)
+        ]
+        sd.hpMax = hpMax;
+        sd.hpCurrent = hpMax;
+        sd.hitDie = HitDice.d8;
+        sd.hitDiceMax = artificerLevel;
+        sd.hitDiceCurrent = artificerLevel;
+        sd.ac = 15;
+        sd.speed = 40;
+        sd.proficiencies = [
+            new Proficiency("Athletics", 2 + pb),
+            new Proficiency("Perception", 2 * pb)
+        ];
+        sd.conditionImmunities = [
+            "Charmed",
+            "Exhaustion",
+            "Poisoned"
+        ];
+        sd.passives = [
+            new Feature("Vigilant", "The defender can't be surprised")
+        ];
+        sd.actions = [
+            new Action("Force-Empowered Rend", 1, HitDice.d8, 5, artificerIntMod + pb),
+            new Action("Repair", 2, HitDice.d8, 5, undefined, 3)
+        ];
+        sd.reactions = [
+            new Feature("Deflect Attack", "Imposes disadvantage to one attack roll on one other creature it can see within 5ft")
+        ];
+
+        return sd;
     }
 
-    public static createHomunculusServant(artificerLevel: number) : Minion {
+    public static createHomunculusServant(artificerLevel : number) : Minion {
         let pb = this.computeProficiencyBonus(artificerLevel);
-        return new Minion({
-            name: "Homunculus Servant",
-            proficiencyBonus: pb,
-            abilityScores: [
-                new AbilityScore(AbilityScores.STR, -3, false),
-                new AbilityScore(AbilityScores.DEX, 2, true),
-                new AbilityScore(AbilityScores.CON, 1, false),
-                new AbilityScore(AbilityScores.INT, 0, false),
-                new AbilityScore(AbilityScores.WIS, 0, false),
-                new AbilityScore(AbilityScores.CHA, -2, false)
-            ],
-            hpMax: 10,
-            hpCurrent: 10,
-            hitDie: HitDice.d4,
-            hitDiceMax: 1,
-            hitDiceCurrent: 1,
-            ac: 13,
-            speed: 30,
-            proficiencies: [
-                new Proficiency("Stealth", 2 + pb),
-                new Proficiency("Perception", 2 + pb)
-            ],
-            conditionImmunities: [
-                "Exhaustion",
-                "Poisoned"
-            ],
-            passives: [
-                new Feature("Evasion", "Dex save - success: no damage, failure: ½ damage")
-            ],
-            actions: [
-                new Action("Force Strike", 1, HitDice.d4, 30, 2 + pb)
-            ],
-            reactions: [
-                new Feature("Channel Magic", "Delivers a spell with a range of touch that you cast (while within 120ft of you)")
-            ]
-        });
+        let hs = new Minion();
+        hs.name = "Homunculus Servant";
+        hs.proficiencyBonus = pb;
+        hs.abilityScores = [
+            new AbilityScore(AbilityScores.STR, -3, false),
+            new AbilityScore(AbilityScores.DEX, 2, true),
+            new AbilityScore(AbilityScores.CON, 1, false),
+            new AbilityScore(AbilityScores.INT, 0, false),
+            new AbilityScore(AbilityScores.WIS, 0, false),
+            new AbilityScore(AbilityScores.CHA, -2, false)
+        ];
+        hs.hpMax = 10;
+        hs.hpCurrent = 10;
+        hs.hitDie = HitDice.d4;
+        hs.hitDiceMax = 1;
+        hs.hitDiceCurrent = 1;
+        hs.ac = 13;
+        hs.speed = 30;
+        hs.proficiencies = [
+            new Proficiency("Stealth", 2 + pb),
+            new Proficiency("Perception", 2 + pb)
+        ];
+        hs.conditionImmunities = [
+            "Exhaustion",
+            "Poisoned"
+        ];
+        hs.passives = [
+            new Feature("Evasion", "Dex save - success = no damage, failure = ½ damage")
+        ];
+        hs.actions = [
+            new Action("Force Strike", 1, HitDice.d4, 30, 2 + pb)
+        ];
+        hs.reactions = [
+            new Feature("Channel Magic", "Delivers a spell with a range of touch that you cast (while within 120ft of you)")
+        ]
+
+        return hs;
     }
 }
 

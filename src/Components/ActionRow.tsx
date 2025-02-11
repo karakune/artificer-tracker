@@ -8,7 +8,7 @@ export default function ActionRow({action, pb}: {action: Action, pb: number}) {
         }
         const uses = [];
         for (let i = 0; i < action.maxUses; i++) {
-            uses.push(<input type="checkbox" checked={i <= action.currentUses}/>)
+            uses.push(<input key={i} type="checkbox" defaultChecked={i <= action.currentUses}/>)
         }
 
         return (
