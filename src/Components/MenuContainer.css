@@ -1,0 +1,36 @@
+.slide-menu {
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(92, 92, 92, 0.4);
+    position: fixed;
+    top: 0;
+    left: 0;
+    transition: transform .3s
+    cubic-bezier(0, .52, 0, 1);
+    z-index: 1000;
+    display: flex;
+}
+
+.slide-menu.hide {
+    transform: translate3d(-100vw, 0, 0);
+}
+
+.slide-menu.show {
+    transform: translate3d(0vw, 0, 0);
+}
+
+.menu-zone {
+    display: flex;
+    flex-flow: column;
+    background-color: #f1f1f1;
+    border-radius: 16px;
+    flex: 0.4;
+    justify-content: space-between;
+}
+
+.menu-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px;
+}
