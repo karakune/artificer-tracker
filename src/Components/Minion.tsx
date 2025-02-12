@@ -2,14 +2,27 @@ import "./Minion.css";
 import AbilityScore from "./AbilityScore.tsx";
 import ActionRow from "./ActionRow.tsx";
 import {Feature as FeatureModel, Minion as MinionModel} from "../Models.tsx";
-import {useState} from "react";
+import {RefObject, useImperativeHandle, useState} from "react";
 import EffectsPanel from "./EffectsPanel.tsx";
 
-export default function Minion({id, minion, mainColor, setMinion}: {id: number, minion: MinionModel, mainColor: string, setMinion: any}) {
+export interface IMinion {
+    resetEffects: () => void
+}
+
+export default function Minion({id, minion, mainColor, setMinion, minionRef}: {id: number, minion: MinionModel, mainColor: string, setMinion: any, minionRef: RefObject<IMinion>}) {
     const [hpChangeAmount, setHpChangeAmount] = useState<number>(0);
     const [isEffectsPanelOpen, setEffectsPanelOpen] = useState(false);
     const [isBlessed, setBlessed] = useState(false);
     const [isEnlarged, setEnlarged] = useState(false);
+
+    useImperativeHandle(minionRef, () => {
+        return {
+            resetEffects: function() {
+                setBlessed(false);
+                setEnlarged(false);
+            }
+        };
+    });
 
     function handleHpAmountChange(e: any) {
         e.preventDefault();

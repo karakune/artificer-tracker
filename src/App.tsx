@@ -1,16 +1,20 @@
 import "./App.css";
-import Minion from "./Components/Minion.tsx";
+import Minion, {IMinion} from "./Components/Minion.tsx";
 import {Minion as MinionModel} from "./Models.tsx";
-import {useState} from "react";
+import {useRef, useState} from "react";
 import MenuContainer from "./Components/MenuContainer.tsx";
 import { PopupActiveContext } from "./Components/ConfirmationPopup.tsx";
 
 function App() {
-    const [steelDefender, setSteelDefender] = useState<MinionModel>(MinionModel.createSteelDefender(5, 4));
-    const [homServant, setHomServant] = useState<MinionModel>(MinionModel.createHomunculusServant(5));
+    const artificerLevel = 5;
+    const artificerIntMod = 4;
+    const [steelDefender, setSteelDefender] = useState<MinionModel>(MinionModel.createSteelDefender(artificerLevel, artificerIntMod));
+    const [homServant, setHomServant] = useState<MinionModel>(MinionModel.createHomunculusServant(artificerLevel));
     const [showMenu, setShowMenu] = useState(false);
     const [isPopupActive, setPopupActive] = useState(false);
     const value = {isPopupActive, setPopupActive}
+    const steelDefenderRef = useRef<IMinion>(null);
+    const homServantRef = useRef<IMinion>(null);
     let touchStartX = 0;
     let touchEndX = 0;
     let swipeThreshold = 20;
@@ -54,14 +58,29 @@ function App() {
         setShowMenu(true);
     }
 
+    function onShortRest() {
+
+    }
+
+    function onLongRest() {
+        let sd = MinionModel.createSteelDefender(artificerLevel, artificerIntMod);
+        sd.hitDiceCurrent = Math.min(sd.hitDiceMax, steelDefender.hitDiceCurrent + Math.floor(sd.hitDiceMax / 2));
+        let hs = MinionModel.createHomunculusServant(artificerLevel);
+        hs.hitDiceCurrent = Math.min(hs.hitDiceMax, homServant.hitDiceCurrent + Math.floor(hs.hitDiceMax / 2));
+        setSteelDefender(sd);
+        setHomServant(hs);
+        steelDefenderRef.current?.resetEffects();
+        homServantRef.current?.resetEffects();
+    }
+
     return (
         <PopupActiveContext.Provider value={value}>
             <main className="container" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} onMouseDown={onClickStart}
                   onMouseUp={onClickEnd}>
-                <MenuContainer isVisible={showMenu}/>
+                <MenuContainer isVisible={showMenu} onShortRest={onShortRest} onLongRest={onLongRest}/>
                 <div className="minion-zone">
-                    <Minion id={0} minion={steelDefender} mainColor="coral" setMinion={setSteelDefender}/>
-                    <Minion id={1} minion={homServant} mainColor="royalblue" setMinion={setHomServant}/>
+                    <Minion minionRef={steelDefenderRef} id={0} minion={steelDefender} mainColor="coral" setMinion={setSteelDefender}/>
+                    <Minion minionRef={homServantRef} id={1} minion={homServant} mainColor="royalblue" setMinion={setHomServant}/>
                 </div>
             </main>
         </PopupActiveContext.Provider>
