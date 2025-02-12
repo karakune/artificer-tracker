@@ -41,12 +41,17 @@ export default function ConfirmationPopup(
     }
 
     return (
-        <Modal style={{overlay: {zIndex: 5000}}} isOpen={isOpen} onRequestClose={handleCancel}
+        <Modal style={{overlay: {zIndex: 5000}, content: {height: "fit-content"}}} isOpen={isOpen} onRequestClose={handleCancel}
                shouldCloseOnOverlayClick={true} shouldCloseOnEsc={true}>
-            <h2>{title}</h2>
-            <label>{description}</label>
-            <button onClick={handleCancel}>{cancelMessage}</button>
-            <button onClick={handleConfirm}>{confirmMessage}</button>
+            <div className="column">
+                <h2>{title}</h2>
+                <label>{description}</label>
+                <br/>
+                <div className="row" style={{justifyContent: "space-evenly"}}>
+                    <button onClick={handleCancel}>{cancelMessage}</button>
+                    <button onClick={handleConfirm}>{confirmMessage}</button>
+                </div>
+            </div>
         </Modal>
     )
 }
