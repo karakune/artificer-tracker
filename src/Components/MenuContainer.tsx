@@ -1,6 +1,7 @@
 import "./MenuContainer.css"
-import ConfirmationPopup, {PopupActiveContext} from "./ConfirmationPopup.tsx";
+import ConfirmationPopup from "./ConfirmationPopup.tsx";
 import React, {useContext, useState} from "react";
+import {PopupActiveContext} from "../Contexts/PopupActiveContext.tsx";
 
 export default function MenuContainer({isVisible, onShortRest, onLongRest}: {isVisible: boolean, onShortRest: () => void, onLongRest: () => void}) {
     const [showShortRestConfirm, setShowShortRestConfirm] = useState(false);

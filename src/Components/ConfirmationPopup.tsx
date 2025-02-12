@@ -1,7 +1,6 @@
 import Modal from "react-modal";
-import React, {createContext, useContext} from "react";
-
-export const PopupActiveContext = createContext<any>({isPopupActive: false, setPopupActive: () => {}});
+import React, {useContext} from "react";
+import {PopupActiveContext} from "../Contexts/PopupActiveContext.tsx";
 
 export default function ConfirmationPopup(
     {

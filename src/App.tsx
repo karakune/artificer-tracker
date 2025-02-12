@@ -3,7 +3,7 @@ import Minion, {IMinion} from "./Components/Minion.tsx";
 import {Minion as MinionModel} from "./Models.tsx";
 import {useRef, useState} from "react";
 import MenuContainer from "./Components/MenuContainer.tsx";
-import { PopupActiveContext } from "./Components/ConfirmationPopup.tsx";
+import { PopupActiveContext } from "./Contexts/PopupActiveContext.tsx";
 
 function App() {
     const artificerLevel = 5;
