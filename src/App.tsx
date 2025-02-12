@@ -60,7 +60,11 @@ function App() {
 
     function onShortRest() {
         steelDefenderRef.current?.resetEffects();
+        steelDefenderRef.current?.promptHitDice();
         homServantRef.current?.resetEffects();
+        homServantRef.current?.promptHitDice();
+
+        setShowMenu(false);
     }
 
     function onLongRest() {

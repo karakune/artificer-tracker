@@ -94,16 +94,26 @@ export default function HitDicePanel(
             shouldCloseOnOverlayClick={true} shouldCloseOnEsc={true}>
             <ShowResult hitDiceToSpend={hitDiceToApply}/>
             <h2 style={{display: "flex", justifyContent: "center"}}>Spend hit dice</h2>
-            <div className="column" style={{gap: "20px"}}>
-                <label style={{textAlign: "start"}}>{minion.name} currently has <b>{minion.hpCurrent}/{minion.hpMax}</b> HP
-                    and <b>{minion.hitDiceCurrent}</b> {minion.hitDie}s available out of <b>{minion.hitDiceMax}</b>.
-                    How many would you like to spend?</label>
-                {displayHitDice()}
-                <div className="row" style={{justifyContent: "space-evenly"}}>
-                    <button onClick={() => setOpen(false)}>Cancel</button>
-                    <button onClick={applyHitDice}>Confirm</button>
+            {
+                minion.hitDiceCurrent > 0 &&
+                <div className="column" style={{gap: "20px"}}>
+                    <label style={{textAlign: "start"}}>{minion.name} currently has <b>{minion.hpCurrent}/{minion.hpMax}</b> HP
+                        and <b>{minion.hitDiceCurrent}</b> {minion.hitDie}s available out of <b>{minion.hitDiceMax}</b>.
+                        How many would you like to spend?</label>
+                    {displayHitDice()}
+                    <div className="row" style={{justifyContent: "space-evenly"}}>
+                        <button onClick={() => setOpen(false)}>Cancel</button>
+                        <button onClick={applyHitDice}>Confirm</button>
+                    </div>
                 </div>
-            </div>
+            }
+            {
+                minion.hitDiceCurrent == 0 &&
+                <div className="column" style={{gap: "20px"}}>
+                    <label style={{textAlign: "start"}}>{minion.name} has no hit dice to spend</label>
+                    <button onClick={() => setOpen(false)}>Close</button>
+                </div>
+            }
         </Modal>
     )
 }

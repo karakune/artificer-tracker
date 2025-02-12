@@ -7,7 +7,8 @@ import EffectsPanel from "./EffectsPanel.tsx";
 import HitDicePanel from "./HitDicePanel.tsx";
 
 export interface IMinion {
-    resetEffects: () => void
+    resetEffects: () => void,
+    promptHitDice: () => void
 }
 
 export default function Minion({id, minion, mainColor, setMinion, minionRef}: {id: number, minion: MinionModel, mainColor: string, setMinion: any, minionRef: RefObject<IMinion>}) {
@@ -22,6 +23,9 @@ export default function Minion({id, minion, mainColor, setMinion, minionRef}: {i
             resetEffects: function() {
                 setBlessed(false);
                 setEnlarged(false);
+            },
+            promptHitDice: function() {
+                setHitDicePanelOpen(true);
             }
         };
     });
