@@ -6,6 +6,7 @@ export default function EffectsPanel(
         id,
         isOpen,
         setOpen,
+        setHitDicePanelOpen,
         isBlessed,
         setBlessed,
         isEnlarged,
@@ -14,6 +15,7 @@ export default function EffectsPanel(
         id: number,
         isOpen: boolean,
         setOpen: React.Dispatch<React.SetStateAction<boolean>>,
+        setHitDicePanelOpen: React.Dispatch<void>,
         isBlessed: boolean,
         setBlessed: React.Dispatch<React.SetStateAction<boolean>>,
         isEnlarged: boolean,
@@ -32,16 +34,24 @@ export default function EffectsPanel(
             }}
             isOpen={isOpen} onRequestClose={() => setOpen(false)}
             shouldCloseOnOverlayClick={true} shouldCloseOnEsc={true}>
-            <h2>Apply Effects</h2>
-            <div>
-                <input type="checkbox" defaultChecked={isBlessed}
-                       onChange={(e) => setBlessed(e.target.checked)}/>
-                <label>Bless</label>
-            </div>
-            <div>
-                <input type="checkbox" defaultChecked={isEnlarged}
-                       onChange={(e) => setEnlarged(e.target.checked)}/>
-                <label>Enlarge</label>
+            <div className="column">
+                <h2>Apply Effects</h2>
+                <div className="column" style={{gap:"10px"}}>
+                    <div>
+                        <input type="checkbox" defaultChecked={isBlessed}
+                               onChange={(e) => setBlessed(e.target.checked)}/>
+                        <label>Bless</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" defaultChecked={isEnlarged}
+                               onChange={(e) => setEnlarged(e.target.checked)}/>
+                        <label>Enlarge</label>
+                    </div>
+                    <button onClick={() => {
+                        setHitDicePanelOpen();
+                        setOpen(false);
+                    }}>Spend hit dice</button>
+                </div>
             </div>
         </Modal>
     )

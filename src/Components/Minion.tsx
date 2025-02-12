@@ -2,8 +2,9 @@ import "./Minion.css";
 import AbilityScore from "./AbilityScore.tsx";
 import ActionRow from "./ActionRow.tsx";
 import {Feature as FeatureModel, Minion as MinionModel} from "../Models.tsx";
-import {RefObject, useImperativeHandle, useState} from "react";
+import React, {RefObject, useImperativeHandle, useState} from "react";
 import EffectsPanel from "./EffectsPanel.tsx";
+import HitDicePanel from "./HitDicePanel.tsx";
 
 export interface IMinion {
     resetEffects: () => void
@@ -12,6 +13,7 @@ export interface IMinion {
 export default function Minion({id, minion, mainColor, setMinion, minionRef}: {id: number, minion: MinionModel, mainColor: string, setMinion: any, minionRef: RefObject<IMinion>}) {
     const [hpChangeAmount, setHpChangeAmount] = useState<number>(0);
     const [isEffectsPanelOpen, setEffectsPanelOpen] = useState(false);
+    const [isHitDicePanelOpen, setHitDicePanelOpen] = useState(false);
     const [isBlessed, setBlessed] = useState(false);
     const [isEnlarged, setEnlarged] = useState(false);
 
@@ -66,6 +68,18 @@ export default function Minion({id, minion, mainColor, setMinion, minionRef}: {i
         setEffectsPanelOpen(true);
     }
 
+    function openHitDicePanel() {
+        setEffectsPanelOpen(false);
+        setHitDicePanelOpen(true);
+    }
+
+    function spendHitDice(hitDiceToSpend: number, healingToApply: number) {
+        let newHp = Math.min(minion.hpMax, minion.hpCurrent + healingToApply);
+        let newHitDice = minion.hitDiceCurrent - hitDiceToSpend;
+
+        setMinion({...minion, hpCurrent: newHp, hitDiceCurrent: newHitDice});
+    }
+
     const Feature = function({feature}: {feature: FeatureModel}) {
         return (
             <label style={{fontSize:"0.9em"}}><b>{feature.title}</b> {feature.description}</label>
@@ -76,7 +90,10 @@ export default function Minion({id, minion, mainColor, setMinion, minionRef}: {i
         // @ts-ignore
         <div className="minion" style={{"--minion-color": mainColor}}>
             <EffectsPanel id={id} isOpen={isEffectsPanelOpen} setOpen={setEffectsPanelOpen} isBlessed={isBlessed}
-                          setBlessed={setBlessed} isEnlarged={isEnlarged} setEnlarged={setEnlarged} />
+                          setBlessed={setBlessed} isEnlarged={isEnlarged} setEnlarged={setEnlarged}
+                          setHitDicePanelOpen={openHitDicePanel}/>
+            <HitDicePanel id={id} isOpen={isHitDicePanelOpen} setOpen={setHitDicePanelOpen} minion={minion}
+                          onApply={spendHitDice}/>
             <div className="title-row">
                 <label className="minion-name">{minion.name}</label>
                 <div className="row hp-group">
