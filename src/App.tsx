@@ -59,18 +59,23 @@ function App() {
     }
 
     function onShortRest() {
-
+        steelDefenderRef.current?.resetEffects();
+        homServantRef.current?.resetEffects();
     }
 
     function onLongRest() {
         let sd = MinionModel.createSteelDefender(artificerLevel, artificerIntMod);
         sd.hitDiceCurrent = Math.min(sd.hitDiceMax, steelDefender.hitDiceCurrent + Math.floor(sd.hitDiceMax / 2));
+        setSteelDefender(sd);
+
         let hs = MinionModel.createHomunculusServant(artificerLevel);
         hs.hitDiceCurrent = Math.min(hs.hitDiceMax, homServant.hitDiceCurrent + Math.floor(hs.hitDiceMax / 2));
-        setSteelDefender(sd);
         setHomServant(hs);
+
         steelDefenderRef.current?.resetEffects();
         homServantRef.current?.resetEffects();
+
+        setShowMenu(false);
     }
 
     return (

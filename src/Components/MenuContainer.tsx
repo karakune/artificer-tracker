@@ -18,13 +18,13 @@ export default function MenuContainer({isVisible, onShortRest, onLongRest}: {isV
             <div className="menu-zone">
                 <div style={{display:"flex", flexFlow: "column", gap:"1vh", marginTop: "3vh"}}>
                     <button className="menu-button" onClick={() => {
-                        setShowLongRestConfirm(true);
-                        setPopupActive(true);
-                    }}>Long Rest</button>
-                    <button className="menu-button" onClick={() => {
                         setShowShortRestConfirm(true);
                         setPopupActive(true);
                     }}>Short Rest</button>
+                    <button className="menu-button" onClick={() => {
+                        setShowLongRestConfirm(true);
+                        setPopupActive(true);
+                    }}>Long Rest</button>
                 </div>
                 <button className="menu-button">Settings</button>
             </div>
