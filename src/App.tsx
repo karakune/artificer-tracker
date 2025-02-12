@@ -6,8 +6,8 @@ import MenuContainer from "./Components/MenuContainer.tsx";
 import { PopupActiveContext } from "./Contexts/PopupActiveContext.tsx";
 
 function App() {
-    const artificerLevel = 5;
-    const artificerIntMod = 4;
+    const [artificerLevel, setArtificerLevel] = useState(5);
+    const [artificerIntMod, setArtificerIntMod] = useState(4);
     const [steelDefender, setSteelDefender] = useState<MinionModel>(MinionModel.createSteelDefender(artificerLevel, artificerIntMod));
     const [homServant, setHomServant] = useState<MinionModel>(MinionModel.createHomunculusServant(artificerLevel));
     const [showMenu, setShowMenu] = useState(false);
@@ -82,11 +82,31 @@ function App() {
         setShowMenu(false);
     }
 
+    function onSettingsSave(level: number, intMod: number) {
+        setArtificerLevel(level);
+        setArtificerIntMod(intMod);
+
+        let sd = MinionModel.createSteelDefender(level, intMod);
+        sd.hpCurrent = Math.min(steelDefender.hpCurrent, sd.hpMax);
+        sd.hpTemp = steelDefender.hpTemp;
+        sd.hitDiceCurrent = Math.min(steelDefender.hitDiceCurrent, sd.hitDiceMax);
+        sd.actions[1].currentUses = steelDefender.actions[1].currentUses;
+        setSteelDefender(sd);
+
+        let hs = MinionModel.createHomunculusServant(level);
+        hs.hpCurrent = Math.min(homServant.hpCurrent, hs.hpMax);
+        hs.hpTemp = homServant.hpTemp;
+        hs.hitDiceCurrent = Math.min(homServant.hitDiceCurrent, hs.hitDiceMax);
+        setHomServant(hs);
+
+        setShowMenu(false);
+    }
+
     return (
         <PopupActiveContext.Provider value={value}>
             <main className="container" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} onMouseDown={onClickStart}
                   onMouseUp={onClickEnd}>
-                <MenuContainer isVisible={showMenu} onShortRest={onShortRest} onLongRest={onLongRest}/>
+                <MenuContainer isVisible={showMenu} onShortRest={onShortRest} onLongRest={onLongRest} onSettingsSave={onSettingsSave} level={artificerLevel} intMod={artificerIntMod}/>
                 <div className="minion-zone">
                     <Minion minionRef={steelDefenderRef} id={0} minion={steelDefender} mainColor="coral" setMinion={setSteelDefender}/>
                     <Minion minionRef={homServantRef} id={1} minion={homServant} mainColor="royalblue" setMinion={setHomServant}/>
