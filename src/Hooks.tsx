@@ -1,6 +1,6 @@
 import {create} from "zustand";
 import {BaseDirectory, writeTextFile} from "@tauri-apps/plugin-fs";
-import {Minion} from "./Models.tsx";
+import {Minion as MinionModel, Minion} from "./Models.tsx";
 
 interface Snapshot {
     artificerLevel: number,
@@ -11,7 +11,7 @@ interface Snapshot {
     steelDefenderIsEnlarged: boolean,
     homunculusServantIsBlessed: boolean,
     homunculusServantIsEnlarged: boolean,
-    // setArtificerLevel: (value: number) => void,
+    setArtificerLevel: (value: number) => void,
     // setArtificerIntMod: (value: number) => void,
     // setSteelDefender: (value: Minion) => void,
     // setHomunculusServant: (value: Minion) => void,
@@ -19,17 +19,6 @@ interface Snapshot {
     // setSteelDefenderIsEnlarged: (value: boolean) => void,
     // setHomunculusServantIsBlessed: (value: boolean) => void,
     // setHomunculusServantIsEnlarged: (value: boolean) => void,
-    getSnapshot: () => Snapshot
-    setSnapshot: (
-        artificerLevel: number,
-        artificerIntMod: number,
-        steelDefender: Minion,
-        homunculusServant: Minion,
-        steelDefenderIsBlessed: boolean,
-        steelDefenderIsEnlarged: boolean,
-        homunculusServantIsBlessed: boolean,
-        homunculusServantIsEnlarged: boolean,
-    ) => void,
     save: () => void
 }
 
@@ -44,8 +33,12 @@ export const useSnapshot = create<Snapshot>()((set, get) => ({
     homunculusServantIsBlessed: false,
     homunculusServantIsEnlarged: false,
 
-    // setArtificerLevel: (value: number) => set(() => ({artificerLevel: value})),
-    // setArtificerIntMod: (value: number) => set(() => ({artificerIntMod: value})),
+    setArtificerLevel: (value: number) => {
+        set(() => ({artificerLevel: value}));
+        updateSteelDefender();
+        get().save();
+    },
+    setArtificerIntMod: (value: number) => set(() => ({artificerIntMod: value})),
     // setSteelDefender: (value: Minion) => set(() => ({steelDefender: value})),
     // setHomunculusServant: (value: Minion) => set(() => ({homunculusServant: value})),
     // setSteelDefenderIsBlessed: (value: boolean) => set(() => ({steelDefenderIsBlessed: value})),
@@ -53,31 +46,20 @@ export const useSnapshot = create<Snapshot>()((set, get) => ({
     // setHomunculusServantIsBlessed: (value: boolean) => set(() => ({homunculusServantIsBlessed: value})),
     // setHomunculusServantIsEnlarged: (value: boolean) => set(() => ({homunculusServantIsEnlarged: value})),
 
-    getSnapshot: () => get(),
-
-    setSnapshot: (
-        artificerLevel: number,
-        artificerIntMod: number,
-        steelDefender: Minion,
-        homunculusServant: Minion,
-        steelDefenderIsBlessed: boolean,
-        steelDefenderIsEnlarged: boolean,
-        homunculusServantIsBlessed: boolean,
-        homunculusServantIsEnlarged: boolean,
-    ) => {
-        set({
-            artificerLevel,
-            artificerIntMod,
-            steelDefender,
-            homunculusServant,
-            steelDefenderIsBlessed,
-            steelDefenderIsEnlarged,
-            homunculusServantIsBlessed,
-            homunculusServantIsEnlarged,
-        });
-    },
-
     save: async () => {
-        await writeTextFile("save.json", JSON.stringify(get()), {baseDir: BaseDirectory.AppCache});
+        await writeTextFile("save.json", JSON.stringify(get(), null, 2), {baseDir: BaseDirectory.AppCache});
     }
 }));
+
+const updateSteelDefender = () => {
+    let snapshot = useSnapshot.getState();
+    let current = snapshot.steelDefender;
+
+    let sd = MinionModel.createSteelDefender(snapshot.artificerLevel, snapshot.artificerIntMod);
+    sd.hpCurrent = Math.min(current.hpCurrent, sd.hpMax);
+    sd.hpTemp = current.hpTemp;
+    sd.hitDiceCurrent = Math.min(current.hitDiceCurrent, sd.hitDiceMax);
+    sd.actions[1].currentUses = current.actions[1].currentUses;
+
+    useSnapshot.setState({steelDefender: sd});
+}

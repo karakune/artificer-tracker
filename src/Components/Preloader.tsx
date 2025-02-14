@@ -6,44 +6,42 @@ import {useSnapshot} from "../Hooks.tsx";
 
 export default function Preloader() {
     const [isDataLoaded, setDataLoaded] = useState(false);
-    const setSnapshot = useSnapshot(state => state.setSnapshot);
-    const getSnapshot = useSnapshot(state => state.getSnapshot);
+    const snapshot = useSnapshot;
 
     useEffect(() => {
         readTextFile("save.json", {baseDir: BaseDirectory.AppCache})
             .then((text) => {
                 console.log("in the then");
                 let asJson = JSON.parse(text);
-                setSnapshot(
-                    asJson.artificerLevel,
-                    asJson.artificerIntMod,
-                    asJson.steelDefender,
-                    asJson.homunculusServant,
-                    asJson.steelDefenderIsBlessed,
-                    asJson.steelDefenderIsEnlarged,
-                    asJson.homunculusServantIsBlessed,
-                    asJson.homunculusServantIsEnlarged,
-                );
+                snapshot.setState({
+                    artificerLevel: asJson.artificerLevel,
+                    artificerIntMod: asJson.artificerIntMod,
+                    steelDefender: asJson.steelDefender,
+                    homunculusServant: asJson.homunculusServant,
+                    steelDefenderIsBlessed: asJson.steelDefenderIsBlessed,
+                    steelDefenderIsEnlarged: asJson.steelDefenderIsEnlarged,
+                    homunculusServantIsBlessed: asJson.homunculusServantIsBlessed,
+                    homunculusServantIsEnlarged: asJson.homunculusServantIsEnlarged,
+                });
             })
             .catch(() => {
                 console.log("in the catch");
                 const artificerLevel = 5;
                 const artificerIntMod = 4;
-                setSnapshot(
-                    artificerLevel,
-                    artificerIntMod,
-                    MinionModel.createSteelDefender(artificerLevel, artificerIntMod),
-                    MinionModel.createHomunculusServant(artificerLevel),
-                    false,
-                    false,
-                    false,
-                    false,
-                );
-                getSnapshot().save();
+                snapshot.setState({
+                    artificerLevel: artificerLevel,
+                    artificerIntMod: artificerIntMod,
+                    steelDefender: MinionModel.createSteelDefender(artificerLevel, artificerIntMod),
+                    homunculusServant: MinionModel.createHomunculusServant(artificerLevel),
+                    steelDefenderIsBlessed: false,
+                    steelDefenderIsEnlarged: false,
+                    homunculusServantIsBlessed: false,
+                    homunculusServantIsEnlarged: false,
+                });
+                snapshot.getState().save();
             })
             .finally(() => {
-                let snapshot = getSnapshot();
-                console.log(snapshot);
+                console.log(snapshot.getState());
                 setDataLoaded(true);
             });
     }, [isDataLoaded]);

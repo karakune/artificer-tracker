@@ -7,15 +7,15 @@ import {PopupActiveContext} from "./Contexts/PopupActiveContext.tsx";
 import {useSnapshot} from "./Hooks.tsx";
 
 function App() {
-    const getSnapshot = useSnapshot(state => state.getSnapshot);
+    const snapshot = useSnapshot.getState();
 
-    const [artificerLevel, setArtificerLevel] = useState(getSnapshot().artificerLevel);
-    const [artificerIntMod, setArtificerIntMod] = useState(getSnapshot().artificerIntMod);
+    const [artificerLevel, setArtificerLevel] = useState(snapshot.artificerLevel);
+    const [artificerIntMod, setArtificerIntMod] = useState(snapshot.artificerIntMod);
 
     // const [steelDefender, setSteelDefender] = useState<MinionModel>(MinionModel.createSteelDefender(artificerLevel, artificerIntMod));
     // const [homServant, setHomServant] = useState<MinionModel>(MinionModel.createHomunculusServant(artificerLevel));
-    const [steelDefender, setSteelDefender] = useState<MinionModel>(getSnapshot().steelDefender);
-    const [homServant, setHomServant] = useState<MinionModel>(getSnapshot().homunculusServant);
+    const [steelDefender, setSteelDefender] = useState<MinionModel>(snapshot.steelDefender);
+    const [homServant, setHomServant] = useState<MinionModel>(snapshot.homunculusServant);
 
     const [showMenu, setShowMenu] = useState(false);
     const [isPopupActive, setPopupActive] = useState(false);
@@ -91,15 +91,9 @@ function App() {
     }
 
     function onSettingsSave(level: number, intMod: number) {
-        setArtificerLevel(level);
+        // setArtificerLevel(level);
+        snapshot.setArtificerLevel(level);
         setArtificerIntMod(intMod);
-
-        let sd = MinionModel.createSteelDefender(level, intMod);
-        sd.hpCurrent = Math.min(steelDefender.hpCurrent, sd.hpMax);
-        sd.hpTemp = steelDefender.hpTemp;
-        sd.hitDiceCurrent = Math.min(steelDefender.hitDiceCurrent, sd.hitDiceMax);
-        sd.actions[1].currentUses = steelDefender.actions[1].currentUses;
-        setSteelDefender(sd);
 
         let hs = MinionModel.createHomunculusServant(level);
         hs.hpCurrent = Math.min(homServant.hpCurrent, hs.hpMax);
