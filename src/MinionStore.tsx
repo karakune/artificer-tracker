@@ -1,8 +1,8 @@
 import {create} from "zustand";
 import {BaseDirectory, writeTextFile} from "@tauri-apps/plugin-fs";
-import {Minion as MinionModel, Minion} from "./Models.tsx";
+import {Minion} from "./Models.tsx";
 
-interface Snapshot {
+interface MinionStore {
     artificerLevel: number,
     artificerIntMod: number,
     steelDefender: Minion,
@@ -24,7 +24,7 @@ interface Snapshot {
 }
 
 
-export const useSnapshot = create<Snapshot>()((set, get) => ({
+export const useMinionStore = create<MinionStore>()((set, get) => ({
     artificerLevel: 0,
     artificerIntMod: 0,
     steelDefender: {} as Minion,
@@ -75,26 +75,26 @@ export const useSnapshot = create<Snapshot>()((set, get) => ({
 }));
 
 const updateSteelDefender = () => {
-    let snapshot = useSnapshot.getState();
-    let current = snapshot.steelDefender;
+    let store = useMinionStore.getState();
+    let current = store.steelDefender;
 
-    let sd = MinionModel.createSteelDefender(snapshot.artificerLevel, snapshot.artificerIntMod);
+    let sd = Minion.createSteelDefender(store.artificerLevel, store.artificerIntMod);
     sd.hpCurrent = Math.min(current.hpCurrent, sd.hpMax);
     sd.hpTemp = current.hpTemp;
     sd.hitDiceCurrent = Math.min(current.hitDiceCurrent, sd.hitDiceMax);
     sd.actions[1].currentUses = current.actions[1].currentUses;
 
-    useSnapshot.setState({steelDefender: sd});
+    useMinionStore.setState({steelDefender: sd});
 }
 
 const updateHomunculusServant = () => {
-    let snapshot = useSnapshot.getState();
-    let current = snapshot.steelDefender;
+    let store = useMinionStore.getState();
+    let current = store.steelDefender;
 
-    let hs = MinionModel.createHomunculusServant(snapshot.artificerLevel);
+    let hs = Minion.createHomunculusServant(store.artificerLevel);
     hs.hpCurrent = Math.min(current.hpCurrent, hs.hpMax);
     hs.hpTemp = current.hpTemp;
     hs.hitDiceCurrent = Math.min(current.hitDiceCurrent, hs.hitDiceMax);
 
-    useSnapshot.setState({homunculusServant: hs});
+    useMinionStore.setState({homunculusServant: hs});
 }

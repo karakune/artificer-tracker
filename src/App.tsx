@@ -3,22 +3,24 @@ import Minion, {IMinion} from "./Components/Minion.tsx";
 import {useRef, useState} from "react";
 import MenuContainer from "./Components/MenuContainer.tsx";
 import {PopupActiveContext} from "./Contexts/PopupActiveContext.tsx";
-import {useSnapshot} from "./Hooks.tsx";
+import {useMinionStore} from "./MinionStore.tsx";
 
 function App() {
-    const snapshot = useSnapshot.getState();
+    const minionStore = useMinionStore.getState();
 
-    const artificerLevel = useSnapshot((state) => state.artificerLevel);
-    const artificerIntMod = useSnapshot((state) => state.artificerIntMod);
+    const artificerLevel = useMinionStore((state) => state.artificerLevel);
+    const artificerIntMod = useMinionStore((state) => state.artificerIntMod);
 
-    const steelDefender = useSnapshot((state) => state.steelDefender);
-    const homServant = useSnapshot((state) => state.homunculusServant);
+    const steelDefender = useMinionStore((state) => state.steelDefender);
+    const homServant = useMinionStore((state) => state.homunculusServant);
 
     const [showMenu, setShowMenu] = useState(false);
     const [isPopupActive, setPopupActive] = useState(false);
-    const value = {isPopupActive, setPopupActive}
+    const popupActiveState = {isPopupActive, setPopupActive}
+
     const steelDefenderRef = useRef<IMinion>(null);
     const homServantRef = useRef<IMinion>(null);
+
     let touchStartX = 0;
     let touchEndX = 0;
     let swipeThreshold = 20;
@@ -73,7 +75,7 @@ function App() {
     }
 
     function onLongRest() {
-        snapshot.applyLongRest();
+        minionStore.applyLongRest();
 
         steelDefenderRef.current?.resetEffects();
         homServantRef.current?.resetEffects();
@@ -82,15 +84,15 @@ function App() {
     }
 
     function onSettingsSave(level: number, intMod: number) {
-        snapshot.setArtificerLevel(level);
-        snapshot.setArtificerIntMod(intMod);
-        snapshot.save();
+        minionStore.setArtificerLevel(level);
+        minionStore.setArtificerIntMod(intMod);
+        minionStore.save();
 
         setShowMenu(false);
     }
 
     return (
-        <PopupActiveContext.Provider value={value}>
+        <PopupActiveContext.Provider value={popupActiveState}>
             <main className="container" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} onMouseDown={onClickStart}
                   onMouseUp={onClickEnd}>
                 <MenuContainer isVisible={showMenu} onShortRest={onShortRest} onLongRest={onLongRest} onSettingsSave={onSettingsSave} level={artificerLevel} intMod={artificerIntMod}/>

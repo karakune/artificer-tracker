@@ -1,19 +1,19 @@
 import {useEffect, useState} from "react";
 import App from "../App.tsx";
 import {BaseDirectory, readTextFile} from "@tauri-apps/plugin-fs";
-import {Minion as MinionModel} from "../Models.tsx";
-import {useSnapshot} from "../Hooks.tsx";
+import {Minion} from "../Models.tsx";
+import {useMinionStore} from "../MinionStore.tsx";
 
 export default function Preloader() {
     const [isDataLoaded, setDataLoaded] = useState(false);
-    const snapshot = useSnapshot;
+    const minionStore = useMinionStore;
 
     useEffect(() => {
         readTextFile("save.json", {baseDir: BaseDirectory.AppCache})
             .then((text) => {
                 console.log("in the then");
                 let asJson = JSON.parse(text);
-                snapshot.setState({
+                minionStore.setState({
                     artificerLevel: asJson.artificerLevel,
                     artificerIntMod: asJson.artificerIntMod,
                     steelDefender: asJson.steelDefender,
@@ -28,20 +28,20 @@ export default function Preloader() {
                 console.log("in the catch");
                 const artificerLevel = 5;
                 const artificerIntMod = 4;
-                snapshot.setState({
+                minionStore.setState({
                     artificerLevel: artificerLevel,
                     artificerIntMod: artificerIntMod,
-                    steelDefender: MinionModel.createSteelDefender(artificerLevel, artificerIntMod),
-                    homunculusServant: MinionModel.createHomunculusServant(artificerLevel),
+                    steelDefender: Minion.createSteelDefender(artificerLevel, artificerIntMod),
+                    homunculusServant: Minion.createHomunculusServant(artificerLevel),
                     steelDefenderIsBlessed: false,
                     steelDefenderIsEnlarged: false,
                     homunculusServantIsBlessed: false,
                     homunculusServantIsEnlarged: false,
                 });
-                snapshot.getState().save();
+                minionStore.getState().save();
             })
             .finally(() => {
-                console.log(snapshot.getState());
+                console.log(minionStore.getState());
                 setDataLoaded(true);
             });
     }, [isDataLoaded]);
