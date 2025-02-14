@@ -12,13 +12,14 @@ interface Snapshot {
     homunculusServantIsBlessed: boolean,
     homunculusServantIsEnlarged: boolean,
     setArtificerLevel: (value: number) => void,
-    // setArtificerIntMod: (value: number) => void,
+    setArtificerIntMod: (value: number) => void,
     // setSteelDefender: (value: Minion) => void,
     // setHomunculusServant: (value: Minion) => void,
     // setSteelDefenderIsBlessed: (value: boolean) => void,
     // setSteelDefenderIsEnlarged: (value: boolean) => void,
     // setHomunculusServantIsBlessed: (value: boolean) => void,
     // setHomunculusServantIsEnlarged: (value: boolean) => void,
+    applyLongRest: () => void,
     save: () => void
 }
 
@@ -36,9 +37,31 @@ export const useSnapshot = create<Snapshot>()((set, get) => ({
     setArtificerLevel: (value: number) => {
         set(() => ({artificerLevel: value}));
         updateSteelDefender();
+        updateHomunculusServant();
+    },
+
+    setArtificerIntMod: (value: number) => {
+        set(() => ({artificerIntMod: value}));
+        updateSteelDefender();
+    },
+
+    applyLongRest: () => {
+        let sd = Minion.createSteelDefender(get().artificerLevel, get().artificerIntMod);
+        sd.hitDiceCurrent = Math.min(sd.hitDiceMax, get().steelDefender.hitDiceCurrent + Math.floor(sd.hitDiceMax / 2));
+        // setSteelDefender(sd);
+
+        let hs = Minion.createHomunculusServant(get().artificerLevel);
+        hs.hitDiceCurrent = Math.min(hs.hitDiceMax, get().homunculusServant.hitDiceCurrent + Math.floor(hs.hitDiceMax / 2));
+        // setHomServant(hs);
+
+        set({
+            steelDefender: sd,
+            homunculusServant: hs
+        });
+
         get().save();
     },
-    setArtificerIntMod: (value: number) => set(() => ({artificerIntMod: value})),
+
     // setSteelDefender: (value: Minion) => set(() => ({steelDefender: value})),
     // setHomunculusServant: (value: Minion) => set(() => ({homunculusServant: value})),
     // setSteelDefenderIsBlessed: (value: boolean) => set(() => ({steelDefenderIsBlessed: value})),
@@ -62,4 +85,16 @@ const updateSteelDefender = () => {
     sd.actions[1].currentUses = current.actions[1].currentUses;
 
     useSnapshot.setState({steelDefender: sd});
+}
+
+const updateHomunculusServant = () => {
+    let snapshot = useSnapshot.getState();
+    let current = snapshot.steelDefender;
+
+    let hs = MinionModel.createHomunculusServant(snapshot.artificerLevel);
+    hs.hpCurrent = Math.min(current.hpCurrent, hs.hpMax);
+    hs.hpTemp = current.hpTemp;
+    hs.hitDiceCurrent = Math.min(current.hitDiceCurrent, hs.hitDiceMax);
+
+    useSnapshot.setState({homunculusServant: hs});
 }

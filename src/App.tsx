@@ -1,6 +1,5 @@
 import "./App.css";
 import Minion, {IMinion} from "./Components/Minion.tsx";
-import {Minion as MinionModel} from "./Models.tsx";
 import {useRef, useState} from "react";
 import MenuContainer from "./Components/MenuContainer.tsx";
 import {PopupActiveContext} from "./Contexts/PopupActiveContext.tsx";
@@ -9,13 +8,11 @@ import {useSnapshot} from "./Hooks.tsx";
 function App() {
     const snapshot = useSnapshot.getState();
 
-    const [artificerLevel, setArtificerLevel] = useState(snapshot.artificerLevel);
-    const [artificerIntMod, setArtificerIntMod] = useState(snapshot.artificerIntMod);
+    const artificerLevel = useSnapshot((state) => state.artificerLevel);
+    const artificerIntMod = useSnapshot((state) => state.artificerIntMod);
 
-    // const [steelDefender, setSteelDefender] = useState<MinionModel>(MinionModel.createSteelDefender(artificerLevel, artificerIntMod));
-    // const [homServant, setHomServant] = useState<MinionModel>(MinionModel.createHomunculusServant(artificerLevel));
-    const [steelDefender, setSteelDefender] = useState<MinionModel>(snapshot.steelDefender);
-    const [homServant, setHomServant] = useState<MinionModel>(snapshot.homunculusServant);
+    const steelDefender = useSnapshot((state) => state.steelDefender);
+    const homServant = useSnapshot((state) => state.homunculusServant);
 
     const [showMenu, setShowMenu] = useState(false);
     const [isPopupActive, setPopupActive] = useState(false);
@@ -76,13 +73,7 @@ function App() {
     }
 
     function onLongRest() {
-        let sd = MinionModel.createSteelDefender(artificerLevel, artificerIntMod);
-        sd.hitDiceCurrent = Math.min(sd.hitDiceMax, steelDefender.hitDiceCurrent + Math.floor(sd.hitDiceMax / 2));
-        setSteelDefender(sd);
-
-        let hs = MinionModel.createHomunculusServant(artificerLevel);
-        hs.hitDiceCurrent = Math.min(hs.hitDiceMax, homServant.hitDiceCurrent + Math.floor(hs.hitDiceMax / 2));
-        setHomServant(hs);
+        snapshot.applyLongRest();
 
         steelDefenderRef.current?.resetEffects();
         homServantRef.current?.resetEffects();
@@ -91,15 +82,9 @@ function App() {
     }
 
     function onSettingsSave(level: number, intMod: number) {
-        // setArtificerLevel(level);
         snapshot.setArtificerLevel(level);
-        setArtificerIntMod(intMod);
-
-        let hs = MinionModel.createHomunculusServant(level);
-        hs.hpCurrent = Math.min(homServant.hpCurrent, hs.hpMax);
-        hs.hpTemp = homServant.hpTemp;
-        hs.hitDiceCurrent = Math.min(homServant.hitDiceCurrent, hs.hitDiceMax);
-        setHomServant(hs);
+        snapshot.setArtificerIntMod(intMod);
+        snapshot.save();
 
         setShowMenu(false);
     }
@@ -110,8 +95,8 @@ function App() {
                   onMouseUp={onClickEnd}>
                 <MenuContainer isVisible={showMenu} onShortRest={onShortRest} onLongRest={onLongRest} onSettingsSave={onSettingsSave} level={artificerLevel} intMod={artificerIntMod}/>
                 <div className="minion-zone">
-                    <Minion minionRef={steelDefenderRef} id={0} minion={steelDefender} mainColor="coral" setMinion={setSteelDefender}/>
-                    <Minion minionRef={homServantRef} id={1} minion={homServant} mainColor="royalblue" setMinion={setHomServant}/>
+                    <Minion minionRef={steelDefenderRef} id={0} minion={steelDefender} mainColor="coral"/>
+                    <Minion minionRef={homServantRef} id={1} minion={homServant} mainColor="royalblue"/>
                 </div>
             </main>
         </PopupActiveContext.Provider>

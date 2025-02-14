@@ -11,7 +11,7 @@ export interface IMinion {
     promptHitDice: () => void
 }
 
-export default function Minion({id, minion, mainColor, setMinion, minionRef}: {id: number, minion: MinionModel, mainColor: string, setMinion: any, minionRef: RefObject<IMinion>}) {
+export default function Minion({id, minion, mainColor, minionRef}: {id: number, minion: MinionModel, mainColor: string, minionRef: RefObject<IMinion>}) {
     const [hpChangeAmount, setHpChangeAmount] = useState<number>(0);
     const [isEffectsPanelOpen, setEffectsPanelOpen] = useState(false);
     const [isHitDicePanelOpen, setHitDicePanelOpen] = useState(false);
@@ -37,7 +37,7 @@ export default function Minion({id, minion, mainColor, setMinion, minionRef}: {i
 
     function handleHpTempChange(e: any) {
         e.preventDefault();
-        setMinion({...minion, hpTemp: Math.max(0, Number(e.target.value))});
+        // setMinion({...minion, hpTemp: Math.max(0, Number(e.target.value))});
     }
 
     function healMinion() {
@@ -47,7 +47,7 @@ export default function Minion({id, minion, mainColor, setMinion, minionRef}: {i
 
         let newHp = Math.min(minion.hpMax, minion.hpCurrent + hpChangeAmount);
 
-        setMinion({...minion, hpCurrent: newHp});
+        // setMinion({...minion, hpCurrent: newHp});
         setHpChangeAmount(0);
     }
 
@@ -63,7 +63,7 @@ export default function Minion({id, minion, mainColor, setMinion, minionRef}: {i
             newCurrent = Math.max(0, minion.hpCurrent - (hpChangeAmount - minion.hpTemp));
         }
 
-        setMinion({...minion, hpCurrent: newCurrent, hpTemp: newTemp});
+        // setMinion({...minion, hpCurrent: newCurrent, hpTemp: newTemp});
 
         setHpChangeAmount(0);
     }
@@ -81,7 +81,7 @@ export default function Minion({id, minion, mainColor, setMinion, minionRef}: {i
         let newHp = Math.min(minion.hpMax, minion.hpCurrent + healingToApply);
         let newHitDice = minion.hitDiceCurrent - hitDiceToSpend;
 
-        setMinion({...minion, hpCurrent: newHp, hitDiceCurrent: newHitDice});
+        // setMinion({...minion, hpCurrent: newHp, hitDiceCurrent: newHitDice});
     }
 
     const Feature = function({feature}: {feature: FeatureModel}) {
