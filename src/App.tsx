@@ -3,13 +3,20 @@ import Minion, {IMinion} from "./Components/Minion.tsx";
 import {Minion as MinionModel} from "./Models.tsx";
 import {useRef, useState} from "react";
 import MenuContainer from "./Components/MenuContainer.tsx";
-import { PopupActiveContext } from "./Contexts/PopupActiveContext.tsx";
+import {PopupActiveContext} from "./Contexts/PopupActiveContext.tsx";
+import {useSnapshot} from "./Hooks.tsx";
 
 function App() {
-    const [artificerLevel, setArtificerLevel] = useState(5);
-    const [artificerIntMod, setArtificerIntMod] = useState(4);
-    const [steelDefender, setSteelDefender] = useState<MinionModel>(MinionModel.createSteelDefender(artificerLevel, artificerIntMod));
-    const [homServant, setHomServant] = useState<MinionModel>(MinionModel.createHomunculusServant(artificerLevel));
+    const getSnapshot = useSnapshot(state => state.getSnapshot);
+
+    const [artificerLevel, setArtificerLevel] = useState(getSnapshot().artificerLevel);
+    const [artificerIntMod, setArtificerIntMod] = useState(getSnapshot().artificerIntMod);
+
+    // const [steelDefender, setSteelDefender] = useState<MinionModel>(MinionModel.createSteelDefender(artificerLevel, artificerIntMod));
+    // const [homServant, setHomServant] = useState<MinionModel>(MinionModel.createHomunculusServant(artificerLevel));
+    const [steelDefender, setSteelDefender] = useState<MinionModel>(getSnapshot().steelDefender);
+    const [homServant, setHomServant] = useState<MinionModel>(getSnapshot().homunculusServant);
+
     const [showMenu, setShowMenu] = useState(false);
     const [isPopupActive, setPopupActive] = useState(false);
     const value = {isPopupActive, setPopupActive}
@@ -18,6 +25,7 @@ function App() {
     let touchStartX = 0;
     let touchEndX = 0;
     let swipeThreshold = 20;
+
 
     function onTouchStart(e: any) {
         touchStartX = e.changedTouches[0].screenX;
