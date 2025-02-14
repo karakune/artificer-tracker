@@ -29,6 +29,8 @@ export class Minion {
     public actions: Action[] = [];
     public reactions: Feature[] = [];
     public conditionImmunities: string[] = [];
+    public isBlessed: boolean = false;
+    public isEnlarged: boolean = false;
 
     private static computeProficiencyBonus(artificerLevel: number) {
         return 1 + Math.ceil(artificerLevel / 4);

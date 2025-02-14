@@ -66,9 +66,9 @@ function App() {
     }
 
     function onShortRest() {
-        steelDefenderRef.current?.resetEffects();
+        minionStore.resetEffects();
+        minionStore.save();
         steelDefenderRef.current?.promptHitDice();
-        homServantRef.current?.resetEffects();
         homServantRef.current?.promptHitDice();
 
         setShowMenu(false);
@@ -76,9 +76,10 @@ function App() {
 
     function onLongRest() {
         minionStore.applyLongRest();
+        minionStore.save();
 
-        steelDefenderRef.current?.resetEffects();
-        homServantRef.current?.resetEffects();
+        minionStore.resetEffects();
+        minionStore.save();
 
         setShowMenu(false);
     }

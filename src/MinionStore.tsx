@@ -7,19 +7,14 @@ interface MinionStore {
     artificerIntMod: number,
     steelDefender: Minion,
     homunculusServant: Minion,
-    steelDefenderIsBlessed: boolean,
-    steelDefenderIsEnlarged: boolean,
-    homunculusServantIsBlessed: boolean,
-    homunculusServantIsEnlarged: boolean,
     setArtificerLevel: (value: number) => void,
     setArtificerIntMod: (value: number) => void,
+    setBlessed: (minion: Minion, value: boolean) => void,
+    setEnlarged: (minion: Minion, value: boolean) => void,
     // setSteelDefender: (value: Minion) => void,
     // setHomunculusServant: (value: Minion) => void,
-    // setSteelDefenderIsBlessed: (value: boolean) => void,
-    // setSteelDefenderIsEnlarged: (value: boolean) => void,
-    // setHomunculusServantIsBlessed: (value: boolean) => void,
-    // setHomunculusServantIsEnlarged: (value: boolean) => void,
     applyLongRest: () => void,
+    resetEffects: () => void,
     save: () => void
 }
 
@@ -29,10 +24,6 @@ export const useMinionStore = create<MinionStore>()((set, get) => ({
     artificerIntMod: 0,
     steelDefender: {} as Minion,
     homunculusServant: {} as Minion,
-    steelDefenderIsBlessed: false,
-    steelDefenderIsEnlarged: false,
-    homunculusServantIsBlessed: false,
-    homunculusServantIsEnlarged: false,
 
     setArtificerLevel: (value: number) => {
         set(() => ({artificerLevel: value}));
@@ -45,29 +36,48 @@ export const useMinionStore = create<MinionStore>()((set, get) => ({
         updateSteelDefender();
     },
 
+    setBlessed: (minion: Minion, value: boolean) => {
+        if (minion === get().steelDefender) {
+            set({steelDefender: {...minion, isBlessed: value}});
+        } else if (minion === get().homunculusServant) {
+            set({homunculusServant: {...minion, isBlessed: value}});
+        } else {
+            console.error("minion did not match");
+        }
+    },
+
+    setEnlarged: (minion: Minion, value: boolean) => {
+        if (minion === get().steelDefender) {
+            set({steelDefender: {...minion, isEnlarged: value}});
+        } else if (minion === get().homunculusServant) {
+            set({homunculusServant: {...minion, isEnlarged: value}});
+        } else {
+            console.error("minion did not match");
+        }
+    },
+
     applyLongRest: () => {
         let sd = Minion.createSteelDefender(get().artificerLevel, get().artificerIntMod);
         sd.hitDiceCurrent = Math.min(sd.hitDiceMax, get().steelDefender.hitDiceCurrent + Math.floor(sd.hitDiceMax / 2));
-        // setSteelDefender(sd);
 
         let hs = Minion.createHomunculusServant(get().artificerLevel);
         hs.hitDiceCurrent = Math.min(hs.hitDiceMax, get().homunculusServant.hitDiceCurrent + Math.floor(hs.hitDiceMax / 2));
-        // setHomServant(hs);
 
         set({
             steelDefender: sd,
             homunculusServant: hs
         });
+    },
 
-        get().save();
+    resetEffects: () => {
+        set({
+            steelDefender: {...get().steelDefender, isBlessed: false, isEnlarged: false},
+            homunculusServant: {...get().homunculusServant, isBlessed: false, isEnlarged: false},
+        });
     },
 
     // setSteelDefender: (value: Minion) => set(() => ({steelDefender: value})),
     // setHomunculusServant: (value: Minion) => set(() => ({homunculusServant: value})),
-    // setSteelDefenderIsBlessed: (value: boolean) => set(() => ({steelDefenderIsBlessed: value})),
-    // setSteelDefenderIsEnlarged: (value: boolean) => set(() => ({steelDefenderIsEnlarged: value})),
-    // setHomunculusServantIsBlessed: (value: boolean) => set(() => ({homunculusServantIsBlessed: value})),
-    // setHomunculusServantIsEnlarged: (value: boolean) => set(() => ({homunculusServantIsEnlarged: value})),
 
     save: async () => {
         await writeTextFile("save.json", JSON.stringify(get(), null, 2), {baseDir: BaseDirectory.AppCache});
@@ -83,6 +93,8 @@ const updateSteelDefender = () => {
     sd.hpTemp = current.hpTemp;
     sd.hitDiceCurrent = Math.min(current.hitDiceCurrent, sd.hitDiceMax);
     sd.actions[1].currentUses = current.actions[1].currentUses;
+    sd.isBlessed = current.isBlessed;
+    sd.isEnlarged = current.isEnlarged;
 
     useMinionStore.setState({steelDefender: sd});
 }
@@ -95,6 +107,8 @@ const updateHomunculusServant = () => {
     hs.hpCurrent = Math.min(current.hpCurrent, hs.hpMax);
     hs.hpTemp = current.hpTemp;
     hs.hitDiceCurrent = Math.min(current.hitDiceCurrent, hs.hitDiceMax);
+    hs.isBlessed = current.isBlessed;
+    hs.isEnlarged = current.isEnlarged;
 
     useMinionStore.setState({homunculusServant: hs});
 }

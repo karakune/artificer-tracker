@@ -5,25 +5,20 @@ import {Feature as FeatureModel, Minion as MinionModel} from "../Models.tsx";
 import React, {RefObject, useImperativeHandle, useState} from "react";
 import EffectsPanel from "./EffectsPanel.tsx";
 import HitDicePanel from "./HitDicePanel.tsx";
+import {useMinionStore} from "../MinionStore.tsx";
 
 export interface IMinion {
-    resetEffects: () => void,
     promptHitDice: () => void
 }
 
 export default function Minion({id, minion, mainColor, minionRef}: {id: number, minion: MinionModel, mainColor: string, minionRef: RefObject<IMinion>}) {
+    const minionStore = useMinionStore.getState();
     const [hpChangeAmount, setHpChangeAmount] = useState<number>(0);
     const [isEffectsPanelOpen, setEffectsPanelOpen] = useState(false);
     const [isHitDicePanelOpen, setHitDicePanelOpen] = useState(false);
-    const [isBlessed, setBlessed] = useState(false);
-    const [isEnlarged, setEnlarged] = useState(false);
 
     useImperativeHandle(minionRef, () => {
         return {
-            resetEffects: function() {
-                setBlessed(false);
-                setEnlarged(false);
-            },
             promptHitDice: function() {
                 setHitDicePanelOpen(true);
             }
@@ -72,6 +67,16 @@ export default function Minion({id, minion, mainColor, minionRef}: {id: number, 
         setEffectsPanelOpen(true);
     }
 
+    function setBlessed(value: boolean) {
+        minionStore.setBlessed(minion, value);
+        minionStore.save();
+    }
+
+    function setEnlarged(value: boolean) {
+        minionStore.setEnlarged(minion, value);
+        minionStore.save();
+    }
+
     function openHitDicePanel() {
         setEffectsPanelOpen(false);
         setHitDicePanelOpen(true);
@@ -93,8 +98,8 @@ export default function Minion({id, minion, mainColor, minionRef}: {id: number, 
     return (
         // @ts-ignore
         <div className="minion" style={{"--minion-color": mainColor}}>
-            <EffectsPanel id={id} isOpen={isEffectsPanelOpen} setOpen={setEffectsPanelOpen} isBlessed={isBlessed}
-                          setBlessed={setBlessed} isEnlarged={isEnlarged} setEnlarged={setEnlarged}
+            <EffectsPanel id={id} isOpen={isEffectsPanelOpen} setOpen={setEffectsPanelOpen} isBlessed={minion.isBlessed}
+                          setBlessed={setBlessed} isEnlarged={minion.isEnlarged} setEnlarged={setEnlarged}
                           setHitDicePanelOpen={openHitDicePanel}/>
             <HitDicePanel id={id} isOpen={isHitDicePanelOpen} setOpen={setHitDicePanelOpen} minion={minion}
                           onApply={spendHitDice}/>
@@ -180,7 +185,7 @@ export default function Minion({id, minion, mainColor, minionRef}: {id: number, 
             <div id="actions">
                 <label className="title scooted">Actions</label>
                 {minion.actions.map(a => <ActionRow key={a.name} action={a} pb={minion.proficiencyBonus}
-                                                    isBlessed={isBlessed} isEnlarged={isEnlarged}/>)}
+                                                    isBlessed={minion.isBlessed} isEnlarged={minion.isEnlarged}/>)}
             </div>
             <div id="reactions">
                 <label className="title scooted">Reactions</label>

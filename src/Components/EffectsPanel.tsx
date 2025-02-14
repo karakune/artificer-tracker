@@ -17,9 +17,9 @@ export default function EffectsPanel(
         setOpen: React.Dispatch<React.SetStateAction<boolean>>,
         setHitDicePanelOpen: React.Dispatch<void>,
         isBlessed: boolean,
-        setBlessed: React.Dispatch<React.SetStateAction<boolean>>,
+        setBlessed: (value: boolean) => void,
         isEnlarged: boolean,
-        setEnlarged: React.Dispatch<React.SetStateAction<boolean>>
+        setEnlarged: (value: boolean) => void
     }) {
 
     Modal.setAppElement("#root");
