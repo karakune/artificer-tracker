@@ -13,7 +13,7 @@ export interface IMinion {
 
 export default function Minion({id, minion, mainColor, minionRef}: {id: number, minion: MinionModel, mainColor: string, minionRef: RefObject<IMinion>}) {
     const minionStore = useMinionStore.getState();
-    const [hpChangeAmount, setHpChangeAmount] = useState<number>(0);
+    const [hpChangeAmount, setHpChangeAmount] = useState(0);
     const [isEffectsPanelOpen, setEffectsPanelOpen] = useState(false);
     const [isHitDicePanelOpen, setHitDicePanelOpen] = useState(false);
 
@@ -32,7 +32,8 @@ export default function Minion({id, minion, mainColor, minionRef}: {id: number, 
 
     function handleHpTempChange(e: any) {
         e.preventDefault();
-        // setMinion({...minion, hpTemp: Math.max(0, Number(e.target.value))});
+        minionStore.setHpTemp(minion, e.target.value);
+        minionStore.save();
     }
 
     function healMinion() {
@@ -40,9 +41,9 @@ export default function Minion({id, minion, mainColor, minionRef}: {id: number, 
             return;
         }
 
-        let newHp = Math.min(minion.hpMax, minion.hpCurrent + hpChangeAmount);
+        minionStore.healMinion(minion, hpChangeAmount);
+        minionStore.save()
 
-        // setMinion({...minion, hpCurrent: newHp});
         setHpChangeAmount(0);
     }
 
@@ -51,14 +52,8 @@ export default function Minion({id, minion, mainColor, minionRef}: {id: number, 
             return;
         }
 
-        let newTemp = Math.max(0, minion.hpTemp - hpChangeAmount);
-        let newCurrent = minion.hpCurrent;
-
-        if (newTemp == 0) {
-            newCurrent = Math.max(0, minion.hpCurrent - (hpChangeAmount - minion.hpTemp));
-        }
-
-        // setMinion({...minion, hpCurrent: newCurrent, hpTemp: newTemp});
+        minionStore.damageMinion(minion, hpChangeAmount);
+        minionStore.save();
 
         setHpChangeAmount(0);
     }
@@ -114,7 +109,7 @@ export default function Minion({id, minion, mainColor, minionRef}: {id: number, 
                 <div className="row hp-group">
                     <div className="hp-column">
                         <button className="hp-button" onClick={healMinion}>Heal</button>
-                        <input className="hp-input" type="number" min="0" step="1"
+                        <input className="hp-input" type="number" min="0" step="1" value={hpChangeAmount != 0 ? hpChangeAmount : ""}
                                onChange={handleHpAmountChange}/>
                         <button className="hp-button" onClick={damageMinion}>Damage</button>
                     </div>
@@ -124,7 +119,7 @@ export default function Minion({id, minion, mainColor, minionRef}: {id: number, 
                     </div>
                     <div className="column">
                         <label>Temp</label>
-                        <input className="hp-input" type="number" min="0" step="1" placeholder={minion.hpTemp.toString()}
+                        <input className="hp-input" type="number" min="0" step="1" value={minion.hpTemp != 0 ? minion.hpTemp : ""}
                                onChange={handleHpTempChange}/>
                     </div>
                 </div>

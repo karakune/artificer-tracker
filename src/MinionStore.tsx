@@ -12,6 +12,9 @@ interface MinionStore {
     setBlessed: (minion: Minion, value: boolean) => void,
     setEnlarged: (minion: Minion, value: boolean) => void,
     setRepairUses: (value: number) => void,
+    setHpTemp: (minion: Minion, value: number) => void,
+    healMinion: (minion: Minion, value: number) => void,
+    damageMinion: (minion: Minion, value: number) => void,
     // setSteelDefender: (value: Minion) => void,
     // setHomunculusServant: (value: Minion) => void,
     applyLongRest: () => void,
@@ -61,6 +64,47 @@ export const useMinionStore = create<MinionStore>()((set, get) => ({
         let sd = structuredClone(get().steelDefender);
         sd.actions[1].currentUses = Math.max(0, Math.min(value, sd.actions[1].maxUses as number));
         set({steelDefender: sd});
+    },
+
+    setHpTemp: (minion: Minion, value: number) => {
+        value = Math.max(0, Number(value));
+
+        if (minion === get().steelDefender) {
+            set({steelDefender: {...minion, hpTemp: value}});
+        } else if (minion === get().homunculusServant) {
+            set({homunculusServant: {...minion, hpTemp: value}});
+        } else {
+            console.error("minion did not match");
+        }
+    },
+
+    healMinion: (minion: Minion, value: number) => {
+        let newHp = Math.min(minion.hpMax, minion.hpCurrent + value)
+
+        if (minion === get().steelDefender) {
+            set({steelDefender: {...minion, hpCurrent: newHp}});
+        } else if (minion === get().homunculusServant) {
+            set({homunculusServant: {...minion, hpCurrent: newHp}});
+        } else {
+            console.error("minion did not match");
+        }
+    },
+
+    damageMinion: (minion: Minion, value: number) => {
+        let newTemp = Math.max(0, minion.hpTemp - value);
+        let newCurrent = minion.hpCurrent;
+
+        if (newTemp == 0) {
+            newCurrent = Math.max(0, minion.hpCurrent - (value - minion.hpTemp));
+        }
+
+        if (minion === get().steelDefender) {
+            set({steelDefender: {...minion, hpCurrent: newCurrent, hpTemp: newTemp}});
+        } else if (minion === get().homunculusServant) {
+            set({homunculusServant: {...minion, hpCurrent: newCurrent, hpTemp: newTemp}});
+        } else {
+            console.error("minion did not match");
+        }
     },
 
     applyLongRest: () => {
