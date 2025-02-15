@@ -11,6 +11,7 @@ interface MinionStore {
     setArtificerIntMod: (value: number) => void,
     setBlessed: (minion: Minion, value: boolean) => void,
     setEnlarged: (minion: Minion, value: boolean) => void,
+    setRepairUses: (value: number) => void,
     // setSteelDefender: (value: Minion) => void,
     // setHomunculusServant: (value: Minion) => void,
     applyLongRest: () => void,
@@ -54,6 +55,12 @@ export const useMinionStore = create<MinionStore>()((set, get) => ({
         } else {
             console.error("minion did not match");
         }
+    },
+
+    setRepairUses: (value: number) => {
+        let sd = structuredClone(get().steelDefender);
+        sd.actions[1].currentUses = Math.max(0, Math.min(value, sd.actions[1].maxUses as number));
+        set({steelDefender: sd});
     },
 
     applyLongRest: () => {

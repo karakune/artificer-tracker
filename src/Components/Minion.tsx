@@ -89,6 +89,12 @@ export default function Minion({id, minion, mainColor, minionRef}: {id: number, 
         // setMinion({...minion, hpCurrent: newHp, hitDiceCurrent: newHitDice});
     }
 
+    function onUsesChanged(value: boolean) {
+        let mod = value ? -1 : 1;
+        minionStore.setRepairUses(minion.actions[1].currentUses + mod);
+        minionStore.save();
+    }
+
     const Feature = function({feature}: {feature: FeatureModel}) {
         return (
             <label style={{fontSize:"0.9em"}}><b>{feature.title}</b> {feature.description}</label>
@@ -185,7 +191,8 @@ export default function Minion({id, minion, mainColor, minionRef}: {id: number, 
             <div id="actions">
                 <label className="title scooted">Actions</label>
                 {minion.actions.map(a => <ActionRow key={a.name} action={a} pb={minion.proficiencyBonus}
-                                                    isBlessed={minion.isBlessed} isEnlarged={minion.isEnlarged}/>)}
+                                                    isBlessed={minion.isBlessed} isEnlarged={minion.isEnlarged}
+                                                    onUsesChanged={onUsesChanged}/>)}
             </div>
             <div id="reactions">
                 <label className="title scooted">Reactions</label>

@@ -1,14 +1,16 @@
 import "./ActionRow.css";
 import {Action, HitDice} from "../Models.tsx";
 
-export default function ActionRow({action, pb, isBlessed, isEnlarged}: {action: Action, pb: number, isBlessed: boolean, isEnlarged: boolean}) {
+export default function ActionRow({action, pb, isBlessed, isEnlarged, onUsesChanged}: {action: Action, pb: number, isBlessed: boolean, isEnlarged: boolean, onUsesChanged: (value: boolean) => void}) {
     const Uses = function({action}: {action: Action}) {
         if (action.maxUses == null) {
             return null;
         }
         const uses = [];
         for (let i = 0; i < action.maxUses; i++) {
-            uses.push(<input key={i} type="checkbox" defaultChecked={i > action.currentUses}/>)
+            uses.push(<input key={i} type="checkbox"
+                             onChange={(e) => onUsesChanged(e.target.checked)}
+                             defaultChecked={action.currentUses < action.maxUses - i}/>)
         }
 
         return (
