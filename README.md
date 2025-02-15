@@ -20,5 +20,5 @@ Download the APK in the latest release then run
 # Usage
 Most of the app is pretty straightforward, but here's a few tips:
 - Use the "Apply Effect" panel to toggle bless or enlarge on your minion, or to manually spend hit dice
-- Swipe right on the main screen to open the short rest, long rest and settings menu
+- Swipe right on the main screen (click & drag on PC) to open the short rest, long rest and settings menu
 - Set your artificer level and int modifiers in the settings menu. The relevant features should update automatically
