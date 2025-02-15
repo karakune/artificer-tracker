@@ -78,10 +78,8 @@ export default function Minion({id, minion, mainColor, minionRef}: {id: number, 
     }
 
     function spendHitDice(hitDiceToSpend: number, healingToApply: number) {
-        let newHp = Math.min(minion.hpMax, minion.hpCurrent + healingToApply);
-        let newHitDice = minion.hitDiceCurrent - hitDiceToSpend;
-
-        // setMinion({...minion, hpCurrent: newHp, hitDiceCurrent: newHitDice});
+        minionStore.spendHitDice(minion, hitDiceToSpend, healingToApply);
+        minionStore.save();
     }
 
     function onUsesChanged(value: boolean) {

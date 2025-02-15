@@ -15,8 +15,7 @@ interface MinionStore {
     setHpTemp: (minion: Minion, value: number) => void,
     healMinion: (minion: Minion, value: number) => void,
     damageMinion: (minion: Minion, value: number) => void,
-    // setSteelDefender: (value: Minion) => void,
-    // setHomunculusServant: (value: Minion) => void,
+    spendHitDice: (minion: Minion, hitDiceToSpend: number, healingToApply: number) => void,
     applyLongRest: () => void,
     resetEffects: () => void,
     save: () => void
@@ -102,6 +101,19 @@ export const useMinionStore = create<MinionStore>()((set, get) => ({
             set({steelDefender: {...minion, hpCurrent: newCurrent, hpTemp: newTemp}});
         } else if (minion === get().homunculusServant) {
             set({homunculusServant: {...minion, hpCurrent: newCurrent, hpTemp: newTemp}});
+        } else {
+            console.error("minion did not match");
+        }
+    },
+
+    spendHitDice: (minion: Minion, hitDiceToSpend: number, healingToApply: number) => {
+        let newHp = Math.min(minion.hpMax, minion.hpCurrent + healingToApply);
+        let newHitDice = minion.hitDiceCurrent - hitDiceToSpend;
+
+        if (minion === get().steelDefender) {
+            set({steelDefender: {...minion, hpCurrent: newHp, hitDiceCurrent: newHitDice}});
+        } else if (minion === get().homunculusServant) {
+            set({homunculusServant: {...minion, hpCurrent: newHp, hitDiceCurrent: newHitDice}});
         } else {
             console.error("minion did not match");
         }
