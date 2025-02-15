@@ -11,21 +11,15 @@ export default function Preloader() {
     useEffect(() => {
         readTextFile("save.json", {baseDir: BaseDirectory.AppCache})
             .then((text) => {
-                console.log("in the then");
                 let asJson = JSON.parse(text);
                 minionStore.setState({
                     artificerLevel: asJson.artificerLevel,
                     artificerIntMod: asJson.artificerIntMod,
                     steelDefender: asJson.steelDefender,
                     homunculusServant: asJson.homunculusServant,
-                    steelDefenderIsBlessed: asJson.steelDefenderIsBlessed,
-                    steelDefenderIsEnlarged: asJson.steelDefenderIsEnlarged,
-                    homunculusServantIsBlessed: asJson.homunculusServantIsBlessed,
-                    homunculusServantIsEnlarged: asJson.homunculusServantIsEnlarged,
                 });
             })
             .catch(() => {
-                console.log("in the catch");
                 const artificerLevel = 5;
                 const artificerIntMod = 4;
                 minionStore.setState({
@@ -33,15 +27,10 @@ export default function Preloader() {
                     artificerIntMod: artificerIntMod,
                     steelDefender: Minion.createSteelDefender(artificerLevel, artificerIntMod),
                     homunculusServant: Minion.createHomunculusServant(artificerLevel),
-                    steelDefenderIsBlessed: false,
-                    steelDefenderIsEnlarged: false,
-                    homunculusServantIsBlessed: false,
-                    homunculusServantIsEnlarged: false,
                 });
                 minionStore.getState().save();
             })
             .finally(() => {
-                console.log(minionStore.getState());
                 setDataLoaded(true);
             });
     }, [isDataLoaded]);
