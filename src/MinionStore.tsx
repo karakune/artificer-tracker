@@ -139,9 +139,6 @@ export const useMinionStore = create<MinionStore>()((set, get) => ({
         });
     },
 
-    // setSteelDefender: (value: Minion) => set(() => ({steelDefender: value})),
-    // setHomunculusServant: (value: Minion) => set(() => ({homunculusServant: value})),
-
     save: async () => {
         await writeTextFile("save.json", JSON.stringify(get(), null, 2), {baseDir: BaseDirectory.AppCache});
     }
