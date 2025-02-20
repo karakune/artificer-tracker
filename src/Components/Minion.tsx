@@ -126,14 +126,14 @@ export default function Minion({id, minion, mainColor, minionRef}: {id: number, 
                 <div className="column">
                     <div className="ability-score-group">
                         <div className="row">
-                            <AbilityScore ability={minion.abilityScores[0]} pb={minion.proficiencyBonus}/>
-                            <AbilityScore ability={minion.abilityScores[1]} pb={minion.proficiencyBonus}/>
-                            <AbilityScore ability={minion.abilityScores[2]} pb={minion.proficiencyBonus}/>
+                            <AbilityScore ability={minion.abilityScores[0]} pb={minion.proficiencyBonus} isBlessed={minion.isBlessed}/>
+                            <AbilityScore ability={minion.abilityScores[1]} pb={minion.proficiencyBonus} isBlessed={minion.isBlessed}/>
+                            <AbilityScore ability={minion.abilityScores[2]} pb={minion.proficiencyBonus} isBlessed={minion.isBlessed}/>
                         </div>
                         <div className="row">
-                            <AbilityScore ability={minion.abilityScores[3]} pb={minion.proficiencyBonus}/>
-                            <AbilityScore ability={minion.abilityScores[4]} pb={minion.proficiencyBonus}/>
-                            <AbilityScore ability={minion.abilityScores[5]} pb={minion.proficiencyBonus}/>
+                            <AbilityScore ability={minion.abilityScores[3]} pb={minion.proficiencyBonus} isBlessed={minion.isBlessed}/>
+                            <AbilityScore ability={minion.abilityScores[4]} pb={minion.proficiencyBonus} isBlessed={minion.isBlessed}/>
+                            <AbilityScore ability={minion.abilityScores[5]} pb={minion.proficiencyBonus} isBlessed={minion.isBlessed}/>
                         </div>
                     </div>
                     <div className="characteristic-group" id="proficiencies">
