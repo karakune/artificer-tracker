@@ -1,6 +1,6 @@
 import Modal from "react-modal";
 import React, {useState} from "react";
-import {Minion} from "../Models.tsx";
+import {AbilityScores, Minion} from "../Models.tsx";
 
 export default function HitDicePanel(
     {
@@ -52,7 +52,8 @@ export default function HitDicePanel(
         }
 
         function confirmResult() {
-            let healingToApply = Math.max(0, numberRolled + minion.abilityScores[2].bonus);
+            let constitution = minion.abilityScores[AbilityScores.CON];
+            let healingToApply = Math.max(0, numberRolled + constitution.bonus);
             onApply(hitDiceToSpend, healingToApply);
             setHitDiceToApply(0);
             setResultOpen(false);
@@ -73,7 +74,7 @@ export default function HitDicePanel(
                     <label style={{textAlign: "start"}}>Please roll <b>{hitDiceToSpend}</b>{minion.hitDie}s and enter the result below</label>
                     <input type="number" step="1" min="0" onChange={(e) => {
                         onNumberRolledChanged(Number(e.target.value));
-                    }}/>+{minion.abilityScores[2].bonus}
+                    }}/>+{minion.abilityScores[AbilityScores.CON].bonus}
                     <div className="row" style={{justifyContent: "space-evenly"}}>
                         <button onClick={confirmResult}>Confirm</button>
                     </div>

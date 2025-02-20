@@ -15,7 +15,21 @@ export enum HitDice {
 export class Minion {
     public proficiencyBonus: number = 0;
     public name: string = "";
-    public abilityScores: AbilityScore[] = [];
+    public abilityScores: {
+         STR: AbilityScore,
+         DEX: AbilityScore,
+         CON: AbilityScore,
+         INT: AbilityScore,
+         WIS: AbilityScore,
+         CHA: AbilityScore,
+    } = {
+        STR: new AbilityScore(0, false),
+        DEX: new AbilityScore(0, false),
+        CON: new AbilityScore(0, false),
+        INT: new AbilityScore(0, false),
+        WIS: new AbilityScore(0, false),
+        CHA: new AbilityScore(0, false),
+    };
     public hpMax: number = 0;
     public hpCurrent: number = 0;
     public hpTemp: number = 0;
@@ -43,14 +57,14 @@ export class Minion {
 
         sd.name = "Steel Defender";
         sd.proficiencyBonus = pb;
-        sd.abilityScores = [
-            new AbilityScore(AbilityScores.STR, 2, false),
-            new AbilityScore(AbilityScores.DEX, 1, true),
-            new AbilityScore(AbilityScores.CON, 2, true),
-            new AbilityScore(AbilityScores.INT, -3, false),
-            new AbilityScore(AbilityScores.WIS, 0, false),
-            new AbilityScore(AbilityScores.CHA, -2, false)
-        ]
+        sd.abilityScores = {
+            STR: new AbilityScore(2, false),
+            DEX: new AbilityScore(1, true),
+            CON: new AbilityScore(2, true),
+            INT: new AbilityScore(-3, false),
+            WIS: new AbilityScore(0, false),
+            CHA: new AbilityScore(-2, false),
+        }
         sd.hpMax = hpMax;
         sd.hpCurrent = hpMax;
         sd.hitDie = HitDice.d8;
@@ -86,14 +100,14 @@ export class Minion {
         let hs = new Minion();
         hs.name = "Homunculus Servant";
         hs.proficiencyBonus = pb;
-        hs.abilityScores = [
-            new AbilityScore(AbilityScores.STR, -3, false),
-            new AbilityScore(AbilityScores.DEX, 2, true),
-            new AbilityScore(AbilityScores.CON, 1, false),
-            new AbilityScore(AbilityScores.INT, 0, false),
-            new AbilityScore(AbilityScores.WIS, 0, false),
-            new AbilityScore(AbilityScores.CHA, -2, false)
-        ];
+        hs.abilityScores = {
+            STR: new AbilityScore(-3, false),
+            DEX: new AbilityScore(2, true),
+            CON: new AbilityScore(1, false),
+            INT: new AbilityScore(0, false),
+            WIS: new AbilityScore(0, false),
+            CHA: new AbilityScore(-2, false),
+        }
         hs.hpMax = 10;
         hs.hpCurrent = 10;
         hs.hitDie = HitDice.d4;
@@ -124,7 +138,7 @@ export class Minion {
 }
 
 export class AbilityScore {
-    constructor(public ability: AbilityScores, public bonus: number, public isProficient: boolean) {
+    constructor(public bonus: number, public isProficient: boolean) {
     }
 }
 

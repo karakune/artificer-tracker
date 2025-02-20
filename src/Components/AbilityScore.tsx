@@ -1,5 +1,5 @@
 import "./AbilityScore.css";
-import {AbilityScore as AbilityScoreModel} from "../Models.tsx";
+import {AbilityScore as AbilityScoreModel, AbilityScores, Minion} from "../Models.tsx";
 
 function SavingThrow({ability, pb, isBlessed}: {ability: AbilityScoreModel, pb: number, isBlessed: boolean}) {
     if (!ability.isProficient && !isBlessed) {
@@ -17,12 +17,14 @@ function SavingThrow({ability, pb, isBlessed}: {ability: AbilityScoreModel, pb: 
     return (<label>{output}</label>);
 }
 
-export default function AbilityScore({ability, pb, isBlessed}: {ability: AbilityScoreModel, pb: number, isBlessed: boolean}) {
+export default function AbilityScore({abilityName, minion}: {abilityName: AbilityScores, minion: Minion}) {
+    let ability = minion.abilityScores[abilityName];
+
     return (
         <div className="ability-score">
-            <label>{ability.ability.toString()}</label>
+            <label>{abilityName}</label>
             <label style={{flex:"1"}}>{ability.bonus >= 0 ? "+" : ""}{ability.bonus}</label>
-            <SavingThrow ability={ability} pb={pb} isBlessed={isBlessed}/>
+            <SavingThrow ability={ability} pb={minion.proficiencyBonus} isBlessed={minion.isBlessed}/>
         </div>
     );
 }

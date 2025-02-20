@@ -1,7 +1,7 @@
 import "./Minion.css";
 import AbilityScore from "./AbilityScore.tsx";
 import ActionRow from "./ActionRow.tsx";
-import {Feature as FeatureModel, Minion as MinionModel} from "../Models.tsx";
+import {AbilityScores, Feature as FeatureModel, Minion as MinionModel} from "../Models.tsx";
 import React, {RefObject, useImperativeHandle, useState} from "react";
 import EffectsPanel from "./EffectsPanel.tsx";
 import HitDicePanel from "./HitDicePanel.tsx";
@@ -126,14 +126,14 @@ export default function Minion({id, minion, mainColor, minionRef}: {id: number, 
                 <div className="column">
                     <div className="ability-score-group">
                         <div className="row">
-                            <AbilityScore ability={minion.abilityScores[0]} pb={minion.proficiencyBonus} isBlessed={minion.isBlessed}/>
-                            <AbilityScore ability={minion.abilityScores[1]} pb={minion.proficiencyBonus} isBlessed={minion.isBlessed}/>
-                            <AbilityScore ability={minion.abilityScores[2]} pb={minion.proficiencyBonus} isBlessed={minion.isBlessed}/>
+                            <AbilityScore abilityName={AbilityScores.STR} minion={minion}/>
+                            <AbilityScore abilityName={AbilityScores.DEX} minion={minion}/>
+                            <AbilityScore abilityName={AbilityScores.CON} minion={minion}/>
                         </div>
                         <div className="row">
-                            <AbilityScore ability={minion.abilityScores[3]} pb={minion.proficiencyBonus} isBlessed={minion.isBlessed}/>
-                            <AbilityScore ability={minion.abilityScores[4]} pb={minion.proficiencyBonus} isBlessed={minion.isBlessed}/>
-                            <AbilityScore ability={minion.abilityScores[5]} pb={minion.proficiencyBonus} isBlessed={minion.isBlessed}/>
+                            <AbilityScore abilityName={AbilityScores.INT} minion={minion}/>
+                            <AbilityScore abilityName={AbilityScores.WIS} minion={minion}/>
+                            <AbilityScore abilityName={AbilityScores.CHA} minion={minion}/>
                         </div>
                     </div>
                     <div className="characteristic-group" id="proficiencies">
