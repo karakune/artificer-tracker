@@ -201,7 +201,9 @@ export default function Minion({id, minion, mainColor, minionRef}: {id: number, 
             </div>
             <div id="reactions">
                 <label className="title scooted">Reactions</label>
-                {minion.reactions.map(r => <Feature key={r.title} feature={r}/>)}
+                <div className="scooted">
+                    {minion.reactions.map(r => <Feature key={r.title} feature={r}/>)}
+                </div>
             </div>
         </div>
     );
