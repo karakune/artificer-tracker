@@ -88,6 +88,18 @@ export default function Minion({id, minion, mainColor, minionRef}: {id: number, 
         minionStore.save();
     }
 
+    function getApplyEffectText() {
+        if (minion.isBlessed && minion.isEnlarged) {
+            return <span>Bl.<br/>Enl.</span>;
+        } else if (minion.isBlessed) {
+            return <span>Bl.</span>;
+        } else if (minion.isEnlarged) {
+            return <span>Enl.</span>;
+        } else {
+            return <span>Apply Effects</span>;
+        }
+    }
+
     const Feature = function({feature}: {feature: FeatureModel}) {
         return (
             <label style={{fontSize:"0.9em"}}><b>{feature.title}</b> {feature.description}</label>
@@ -161,7 +173,7 @@ export default function Minion({id, minion, mainColor, minionRef}: {id: number, 
                             <label>Speed</label>
                             <label>{minion.speed}ft</label>
                         </div>
-                        <button className="apply-effect" onClick={openEffectsPanel}>Apply Effect</button>
+                        <button className="apply-effect" onClick={openEffectsPanel}>{getApplyEffectText()}</button>
                     </div>
                     <div className="characteristic-group" id="senses">
                         <label className="title">Senses</label>

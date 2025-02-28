@@ -18,9 +18,13 @@
 .attack-bonus {
     border:  1px solid black;
     border-radius: 8px;
+    padding-left: 3px;
+    padding-right: 3px;
 }
 
 .damage {
     border:  1px solid black;
     border-radius: 8px;
+    padding-left: 3px;
+    padding-right: 3px;
 }

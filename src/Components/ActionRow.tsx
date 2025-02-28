@@ -1,5 +1,6 @@
 import "./ActionRow.css";
-import {Action, HitDice} from "../Models.tsx";
+import {Action, DamageType, HitDice} from "../Models.tsx";
+import damageIcon from "../assets/DamageIcon.png";
 
 export default function ActionRow({action, pb, isBlessed, isEnlarged, onUsesChanged}: {action: Action, pb: number, isBlessed: boolean, isEnlarged: boolean, onUsesChanged: (value: boolean) => void}) {
     const Uses = function({action}: {action: Action}) {
@@ -20,14 +21,32 @@ export default function ActionRow({action, pb, isBlessed, isEnlarged, onUsesChan
         );
     };
 
-    function computeDamageDisplay(): string {
+    function computeDamageDisplay() {
+        let damageText;
         if (!isEnlarged) {
-            return action.damageDiceCount + action.damageDie + "+" + pb;
+            damageText = action.damageDiceCount + action.damageDie + "+" + pb;
         } else if (action.damageDie === HitDice.d4) {
-            return (action.damageDiceCount + 1) + action.damageDie + "+" + pb;
+            damageText = (action.damageDiceCount + 1) + action.damageDie + "+" + pb;
         } else {
-            return "1d4+" + action.damageDiceCount + action.damageDie + "+" + pb;
+            damageText = "1d4+" + action.damageDiceCount + action.damageDie + "+" + pb;
         }
+
+        let icon;
+        switch (action.damageType) {
+            case DamageType.Force:
+                icon = <img style={{height: "1em", verticalAlign:"middle"}} src={damageIcon} alt="dmg icon"/>;
+                break;
+            case DamageType.Healing:
+                icon = "♥";
+                break;
+            default:
+                icon = "";
+                break;
+        }
+
+        return (
+            <span className="damage">{damageText} {icon}</span>
+        );
     }
 
     return (
@@ -39,7 +58,7 @@ export default function ActionRow({action, pb, isBlessed, isEnlarged, onUsesChan
             <div className="action-row-group" style={{justifyContent:"space-between"}}>
                 <label className="range">{action.range}</label>
                 {action.attackMod != null && <label className="attack-bonus">{isBlessed ? "1d4" : ""}+{action.attackMod}</label>}
-                <label className="damage">{computeDamageDisplay()}</label>
+                {computeDamageDisplay()}
             </div>
         </div>
     );

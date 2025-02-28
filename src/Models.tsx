@@ -12,6 +12,11 @@ export enum HitDice {
     d8 = "d8"
 }
 
+export enum DamageType {
+    Force,
+    Healing
+}
+
 export class Minion {
     public proficiencyBonus: number = 0;
     public name: string = "";
@@ -85,8 +90,8 @@ export class Minion {
             new Feature("Vigilant", "The defender can't be surprised")
         ];
         sd.actions = [
-            new Action("Force-Empowered Rend", 1, HitDice.d8, 5, artificerIntMod + pb),
-            new Action("Repair", 2, HitDice.d8, 5, undefined, 3)
+            new Action("Force-Empowered Rend", 1, HitDice.d8, DamageType.Force, 5, artificerIntMod + pb),
+            new Action("Repair", 2, HitDice.d8, DamageType.Healing, 5, undefined, 3)
         ];
         sd.reactions = [
             new Feature("Deflect Attack", "Imposes disadvantage to one attack roll on one other creature it can see within 5ft")
@@ -127,7 +132,7 @@ export class Minion {
             new Feature("Evasion", "Dex save - success = no damage, failure = ½ damage")
         ];
         hs.actions = [
-            new Action("Force Strike", 1, HitDice.d4, 30, 2 + pb)
+            new Action("Force Strike", 1, HitDice.d4, DamageType.Force, 30, 2 + pb, undefined)
         ];
         hs.reactions = [
             new Feature("Channel Magic", "Delivers a spell with a range of touch that you cast (while within 120ft of you)")
@@ -157,6 +162,7 @@ export class Action {
     constructor(public name: string,
                 public damageDiceCount: number,
                 public damageDie: HitDice,
+                public damageType: DamageType,
                 public range: number,
                 public attackMod?: number,
                 public maxUses?: number) {
