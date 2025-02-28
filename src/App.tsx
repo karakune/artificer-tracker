@@ -84,7 +84,11 @@ function App() {
         setShowMenu(false);
     }
 
-    function onSettingsSave(level: number, intMod: number) {
+    function onSettingsSave(level: number, intMod: number, sdName: string, hsName: string) {
+        console.log(sdName);
+        console.log(hsName);
+        minionStore.setName(minionStore.steelDefender, sdName);
+        minionStore.setName(minionStore.homunculusServant, hsName);
         minionStore.setArtificerLevel(level);
         minionStore.setArtificerIntMod(intMod);
         minionStore.save();
@@ -96,7 +100,7 @@ function App() {
         <PopupActiveContext.Provider value={popupActiveState}>
             <main className="container" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} onMouseDown={onClickStart}
                   onMouseUp={onClickEnd}>
-                <MenuContainer isVisible={showMenu} onShortRest={onShortRest} onLongRest={onLongRest} onSettingsSave={onSettingsSave} level={artificerLevel} intMod={artificerIntMod}/>
+                <MenuContainer isVisible={showMenu} onShortRest={onShortRest} onLongRest={onLongRest} onSettingsSave={onSettingsSave} level={artificerLevel} intMod={artificerIntMod} sdName={minionStore.steelDefender.name} hsName={minionStore.homunculusServant.name}/>
                 <div className="minion-zone">
                     <Minion minionRef={steelDefenderRef} id={0} minion={steelDefender} mainColor="coral"/>
                     <Minion minionRef={homServantRef} id={1} minion={homServant} mainColor="royalblue"/>

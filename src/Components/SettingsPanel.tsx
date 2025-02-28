@@ -9,19 +9,25 @@ export default function SettingsPanel(
         onConfirm,
         onCancel,
         startingLevel,
-        startingIntMod
+        startingIntMod,
+        startingSdName,
+        startingHsName
     }:{
         isOpen: boolean,
         setOpen: React.Dispatch<React.SetStateAction<boolean>>,
-        onConfirm: (level: number, intMod: number) => void,
+        onConfirm: (level: number, intMod: number, sdName: string, hsName: string) => void,
         onCancel: () => void,
         startingLevel: number,
-        startingIntMod: number
+        startingIntMod: number,
+        startingSdName: string,
+        startingHsName: string
     }
 ) {
     const {setPopupActive} = useContext(PopupActiveContext);
     const [level, setLevel] = useState(startingLevel);
     const [intMod, setIntMod] = useState(startingIntMod);
+    const [sdName, setSdName] = useState(startingSdName);
+    const [hsName, setHsName] = useState(startingHsName);
 
     Modal.setAppElement("#root");
 
@@ -34,7 +40,7 @@ export default function SettingsPanel(
     function handleConfirm() {
         setOpen(false);
         setPopupActive(false);
-        onConfirm(level, intMod);
+        onConfirm(level, intMod, sdName, hsName);
     }
 
     function onLevelChanged(value: number) {
@@ -43,6 +49,14 @@ export default function SettingsPanel(
 
     function onIntModChanged(value: number) {
         setIntMod(value);
+    }
+
+    function onSdNameChanged(value: string) {
+        setSdName(value);
+    }
+
+    function onHsNameChanged(value: string) {
+        setHsName(value);
     }
 
     return (
@@ -61,6 +75,20 @@ export default function SettingsPanel(
                     <label>Artificer Int Modifier</label>
                     <input type="number" step="1" min="0" defaultValue={startingIntMod} onChange={(e) => {
                         onIntModChanged(Number(e.target.value));
+                    }}/>
+                </div>
+                <br/>
+                <div>
+                    <label>Steel Defender Name</label>
+                    <input defaultValue={startingSdName} onChange={(e) => {
+                        onSdNameChanged(e.target.value);
+                    }}/>
+                </div>
+                <br/>
+                <div>
+                    <label>Homunculus Servant Name</label>
+                    <input defaultValue={startingHsName} onChange={(e) => {
+                        onHsNameChanged(e.target.value);
                     }}/>
                 </div>
                 <br/>

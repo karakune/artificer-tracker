@@ -9,6 +9,7 @@ interface MinionStore {
     homunculusServant: Minion,
     setArtificerLevel: (value: number) => void,
     setArtificerIntMod: (value: number) => void,
+    setName: (minion: Minion, value: string) => void,
     setBlessed: (minion: Minion, value: boolean) => void,
     setEnlarged: (minion: Minion, value: boolean) => void,
     setRepairUses: (value: number) => void,
@@ -37,6 +38,16 @@ export const useMinionStore = create<MinionStore>()((set, get) => ({
     setArtificerIntMod: (value: number) => {
         set(() => ({artificerIntMod: value}));
         updateSteelDefender();
+    },
+
+    setName: (minion: Minion, value: string) => {
+        if (minion === get().steelDefender) {
+            set({steelDefender: {...minion, name: value}});
+        } else if (minion === get().homunculusServant) {
+            set({homunculusServant: {...minion, name: value}});
+        } else {
+            console.error("minion did not match");
+        }
     },
 
     setBlessed: (minion: Minion, value: boolean) => {
@@ -120,10 +131,14 @@ export const useMinionStore = create<MinionStore>()((set, get) => ({
     },
 
     applyLongRest: () => {
+        let current = get().steelDefender;
         let sd = Minion.createSteelDefender(get().artificerLevel, get().artificerIntMod);
+        sd.name = current.name;
         sd.hitDiceCurrent = Math.min(sd.hitDiceMax, get().steelDefender.hitDiceCurrent + Math.floor(sd.hitDiceMax / 2));
 
+        current = get().homunculusServant;
         let hs = Minion.createHomunculusServant(get().artificerLevel);
+        hs.name = current.name;
         hs.hitDiceCurrent = Math.min(hs.hitDiceMax, get().homunculusServant.hitDiceCurrent + Math.floor(hs.hitDiceMax / 2));
 
         set({
@@ -144,11 +159,13 @@ export const useMinionStore = create<MinionStore>()((set, get) => ({
     }
 }));
 
+// Private functions
 const updateSteelDefender = () => {
     let store = useMinionStore.getState();
     let current = store.steelDefender;
 
     let sd = Minion.createSteelDefender(store.artificerLevel, store.artificerIntMod);
+    sd.name = current.name;
     sd.hpCurrent = Math.min(current.hpCurrent, sd.hpMax);
     sd.hpTemp = current.hpTemp;
     sd.hitDiceCurrent = Math.min(current.hitDiceCurrent, sd.hitDiceMax);
@@ -161,9 +178,10 @@ const updateSteelDefender = () => {
 
 const updateHomunculusServant = () => {
     let store = useMinionStore.getState();
-    let current = store.steelDefender;
+    let current = store.homunculusServant;
 
     let hs = Minion.createHomunculusServant(store.artificerLevel);
+    hs.name = current.name;
     hs.hpCurrent = Math.min(current.hpCurrent, hs.hpMax);
     hs.hpTemp = current.hpTemp;
     hs.hitDiceCurrent = Math.min(current.hitDiceCurrent, hs.hitDiceMax);

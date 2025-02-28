@@ -4,7 +4,7 @@ import React, {useContext, useState} from "react";
 import {PopupActiveContext} from "../Contexts/PopupActiveContext.tsx";
 import SettingsPanel from "./SettingsPanel.tsx";
 
-export default function MenuContainer({isVisible, onShortRest, onLongRest, onSettingsSave, level, intMod}: {isVisible: boolean, onShortRest: () => void, onLongRest: () => void, onSettingsSave: (level: number, intMod: number) => void, level: number, intMod: number}) {
+export default function MenuContainer({isVisible, onShortRest, onLongRest, onSettingsSave, level, intMod, sdName, hsName}: {isVisible: boolean, onShortRest: () => void, onLongRest: () => void, onSettingsSave: (level: number, intMod: number, sdName: string, hsName: string) => void, level: number, intMod: number, sdName: string, hsName: string}) {
     const [showShortRestConfirm, setShowShortRestConfirm] = useState(false);
     const [showLongRestConfirm, setShowLongRestConfirm] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
@@ -18,7 +18,7 @@ export default function MenuContainer({isVisible, onShortRest, onLongRest, onSet
             <ConfirmationPopup isOpen={showLongRestConfirm} setOpen={setShowLongRestConfirm} onConfirm={onLongRest} onCancel={() => {}}
                                title="Apply long rest?" description="HP and effects will be reset, and half of max hit dice will be recovered"
             />
-            <SettingsPanel isOpen={showSettings} setOpen={setShowSettings} onConfirm={onSettingsSave} onCancel={() => {}} startingLevel={level} startingIntMod={intMod} />
+            <SettingsPanel isOpen={showSettings} setOpen={setShowSettings} onConfirm={onSettingsSave} onCancel={() => {}} startingLevel={level} startingIntMod={intMod} startingSdName={sdName} startingHsName={hsName} />
             <div className="menu-zone">
                 <div style={{display:"flex", flexFlow: "column", gap:"1vh", marginTop: "3vh"}}>
                     <button className="menu-button" onClick={() => {
