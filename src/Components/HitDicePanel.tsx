@@ -41,7 +41,11 @@ export default function HitDicePanel(
     }
 
     function applyHitDice() {
-        setResultOpen(true);
+        if (hitDiceToApply === 0) {
+            setOpen(false);
+        } else {
+            setResultOpen(true);
+        }
     }
 
     function ShowResult({hitDiceToSpend}: {hitDiceToSpend: number}) {
