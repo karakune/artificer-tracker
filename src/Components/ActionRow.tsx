@@ -1,6 +1,6 @@
 import "./ActionRow.css";
 import {Action, DamageType, HitDice} from "../Models.tsx";
-import damageIcon from "../assets/DamageIcon.png";
+import forceDamage from "../assets/ForceDamage.png";
 
 export default function ActionRow({action, pb, isBlessed, isEnlarged, onUsesChanged}: {action: Action, pb: number, isBlessed: boolean, isEnlarged: boolean, onUsesChanged: (value: boolean) => void}) {
     const Uses = function({action}: {action: Action}) {
@@ -34,7 +34,7 @@ export default function ActionRow({action, pb, isBlessed, isEnlarged, onUsesChan
         let icon;
         switch (action.damageType) {
             case DamageType.Force:
-                icon = <img style={{height: "1em", verticalAlign:"middle"}} src={damageIcon} alt="dmg icon"/>;
+                icon = <img style={{height: "1em", verticalAlign:"middle"}} src={forceDamage} alt="dmg icon"/>;
                 break;
             case DamageType.Healing:
                 icon = "♥";
